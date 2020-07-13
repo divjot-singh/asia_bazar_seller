@@ -1,4 +1,3 @@
-
 import 'package:asia_bazar_seller/blocs/user_database_bloc/bloc.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/state.dart';
 import 'package:asia_bazar_seller/l10n/l10n.dart';
@@ -16,10 +15,9 @@ class AppDrawer extends StatelessWidget {
     return Drawer(
       child: BlocBuilder<UserDatabaseBloc, Map>(
         builder: (context, currentState) {
-          var appState = currentState['userstate'];
           Map user;
-          if (appState is UserIsUser) {
-            user = appState.user;
+          if (currentState['userstate'] is UserIsAdmin) {
+            user = currentState['userstate'].user;
           }
           String username = user != null ? user[KeyNames['userName']] : '';
           return Container(
@@ -81,78 +79,6 @@ class AppDrawer extends StatelessWidget {
                   title: Text(
                       L10n().getStr(
                         'home.title',
-                      ),
-                      style: theme.textTheme.h4
-                          .copyWith(color: ColorShades.greenBg)),
-                ),
-                Divider(
-                  color: ColorShades.greenBg,
-                  thickness: 1,
-                ),
-                ListTile(
-                  onTap: () {
-                    Navigator.popAndPushNamed(context, Constants.CART);
-                  },
-                  leading:
-                      Icon(Icons.shopping_cart, color: ColorShades.greenBg),
-                  title: Text(
-                      L10n().getStr(
-                        'drawer.cart',
-                      ),
-                      style: theme.textTheme.h4
-                          .copyWith(color: ColorShades.greenBg)),
-                ),
-                Divider(
-                  color: ColorShades.greenBg,
-                  thickness: 1,
-                ),
-                ListTile(
-                  onTap: () {
-                    Navigator.popAndPushNamed(context, Constants.ORDER_LIST);
-                  },
-                  leading: Padding(
-                    padding: EdgeInsets.only(left: Spacing.space4),
-                    child: SvgPicture.asset(
-                      'assets/images/invoice.svg',
-                      color: ColorShades.greenBg,
-                      width: 16,
-                    ),
-                  ),
-                  title: Text(
-                      L10n().getStr(
-                        'drawer.orders',
-                      ),
-                      style: theme.textTheme.h4
-                          .copyWith(color: ColorShades.greenBg)),
-                ),
-                Divider(
-                  color: ColorShades.greenBg,
-                  thickness: 1,
-                ),
-                ListTile(
-                  onTap: () {
-                    Navigator.popAndPushNamed(context, Constants.ADDRESS_LIST);
-                  },
-                  leading: Icon(Icons.location_on, color: ColorShades.greenBg),
-                  title: Text(
-                      L10n().getStr(
-                        'drawer.addressList',
-                      ),
-                      style: theme.textTheme.h4
-                          .copyWith(color: ColorShades.greenBg)),
-                ),
-                Divider(
-                  color: ColorShades.greenBg,
-                  thickness: 1,
-                ),
-                ListTile(
-                  onTap: () {
-                    Navigator.popAndPushNamed(context, Constants.ADD_ADDRESS);
-                  },
-                  leading: Icon(Icons.add_location, color: ColorShades.greenBg),
-                  title: Text(
-                      L10n().getStr(
-                        'drawer.addAddress',
                       ),
                       style: theme.textTheme.h4
                           .copyWith(color: ColorShades.greenBg)),

@@ -2,8 +2,7 @@ import 'package:flutter/foundation.dart';
 
 abstract class OrderState {
   static Map orderState = {
-    'orderState': UninitialisedState(),
-    'itemState': UninitialisedState()
+    'ordersListState': UninitialisedState(),
   };
 }
 

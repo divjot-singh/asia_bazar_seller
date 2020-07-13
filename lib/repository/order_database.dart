@@ -31,6 +31,34 @@ class OrderDatabaseRepo {
     }
   }
 
+  Future<List> fetchOrders(
+      {String filter, DocumentSnapshot startAt, String searchQuery}) async {
+    try {
+      QuerySnapshot snapshot;
+      Query query;
+      int limit = 20;
+      if (searchQuery != null && searchQuery.length > 0) {
+        limit = 50;
+        query = orderRef
+            .orderBy('phoneNumber')
+            .startAt([searchQuery]).orderBy('timestamp', descending: true);
+      } else {
+        query = orderRef.orderBy('timestamp', descending: true);
+      }
+      if (filter != null && filter != 'all' && filter.length > 0) {
+        query = query.where('status', isEqualTo: filter);
+      }
+      if (startAt != null && (searchQuery == null || searchQuery.length == 0)) {
+        query = query.startAfterDocument(startAt);
+      }
+      snapshot = await query.limit(limit).getDocuments();
+      return snapshot.documents;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
   Future<List> fetchOrderItems({@required String orderId}) async {
     try {
       QuerySnapshot snapshot = await orderedItems

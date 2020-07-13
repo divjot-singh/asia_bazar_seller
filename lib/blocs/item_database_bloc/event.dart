@@ -42,3 +42,11 @@ class PlaceOrder extends ItemDatabaseEvents {
   PlaceOrder({@required this.orderDetails, this.callback});
 }
 
+class FetchOrdersFiltered extends ItemDatabaseEvents {
+  String filter;
+  DocumentSnapshot startAt;
+  Function callback;
+  String searchQuery;
+  FetchOrdersFiltered(
+      {this.callback, this.filter, this.startAt, this.searchQuery});
+}

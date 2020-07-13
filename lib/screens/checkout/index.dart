@@ -2,9 +2,7 @@ import 'package:asia_bazar_seller/blocs/item_database_bloc/bloc.dart';
 import 'package:asia_bazar_seller/blocs/item_database_bloc/event.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/bloc.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/events.dart';
-import 'package:asia_bazar_seller/blocs/user_database_bloc/state.dart';
 import 'package:asia_bazar_seller/l10n/l10n.dart';
-import 'package:asia_bazar_seller/shared_widgets/app_bar.dart';
 import 'package:asia_bazar_seller/shared_widgets/checkbox_list.dart';
 import 'package:asia_bazar_seller/shared_widgets/customLoader.dart';
 import 'package:asia_bazar_seller/shared_widgets/custom_dialog.dart';
@@ -276,67 +274,7 @@ class _CheckoutState extends State<Checkout> {
   Widget build(BuildContext context) {
     theme = Theme.of(context);
     return BlocBuilder<UserDatabaseBloc, Map>(builder: (context, state) {
-      var currentState = state['userstate'];
-      if (currentState is UserIsUser) {
-        currentUser = currentState.user;
-        List addressList = currentUser[KeyNames['address']];
-        if (address == null)
-          address =
-              addressList.firstWhere((item) => item['is_default'] == true);
-        return SafeArea(
-          child: Scaffold(
-            appBar: MyAppBar(
-              hasTransparentBackground: true,
-              title: L10n().getStr('checkout.checkout'),
-              leading: {
-                'icon': Align(
-                  alignment: Alignment.center,
-                  child: Icon(Icons.arrow_back, color: ColorShades.green),
-                ),
-                'onTap': (context) {
-                  if (itemsOutOfStock) {
-                    Navigator.pop(context, {'refresh': true});
-                  } else {
-                    Navigator.pop(context);
-                  }
-                }
-              },
-            ),
-            body: Padding(
-              padding: EdgeInsets.symmetric(horizontal: Spacing.space16),
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: Spacing.space24,
-                  ),
-                  getAddressBox(),
-                  SizedBox(
-                    height: Spacing.space16,
-                  ),
-                  getPaymentOptions(),
-                ],
-              ),
-            ),
-            bottomNavigationBar: BottomAppBar(
-              child: Container(
-                height: 70,
-                padding: EdgeInsets.symmetric(
-                    horizontal: Spacing.space16, vertical: Spacing.space12),
-                decoration: BoxDecoration(
-                    color: ColorShades.white, boxShadow: [Shadows.cardLight]),
-                child: PrimaryButton(
-                  text: L10n().getStr('checkout.placeOrder'),
-                  disabled: !(currentUser[KeyNames['cart']] is Map &&
-                      currentUser[KeyNames['cart']].length > 0),
-                  onPressed: () {
-                    makePaymentAndPlaceOrder();
-                  },
-                ),
-              ),
-            ),
-          ),
-        );
-      }
+
       return Container();
     });
   }

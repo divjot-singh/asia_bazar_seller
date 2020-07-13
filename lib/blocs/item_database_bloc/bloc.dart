@@ -1,9 +1,9 @@
-
 import 'package:asia_bazar_seller/blocs/global_bloc/state.dart';
 import 'package:asia_bazar_seller/blocs/item_database_bloc/event.dart';
 import 'package:asia_bazar_seller/blocs/item_database_bloc/state.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/state.dart';
 import 'package:asia_bazar_seller/repository/item_database.dart';
+import 'package:asia_bazar_seller/repository/order_database.dart';
 import 'package:asia_bazar_seller/utils/constants.dart';
 import 'package:asia_bazar_seller/utils/storage_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +12,7 @@ class ItemDatabaseBloc extends Bloc<ItemDatabaseEvents, Map> {
   @override
   Map get initialState => UserDatabaseState.userstate;
   ItemDatabase itemDatabase = ItemDatabase();
-
+  OrderDatabaseRepo orderRepo = OrderDatabaseRepo();
   @override
   Stream<Map> mapEventToState(ItemDatabaseEvents event) async* {
     if (event is FetchAllCategories) {
@@ -165,6 +165,46 @@ class ItemDatabaseBloc extends Bloc<ItemDatabaseEvents, Map> {
         state['categoryListing'] = GlobalErrorState();
         yield {...state};
       }
+    } else if (event is FetchOrdersFiltered) {
+      if (event.startAt == null &&
+          (event.searchQuery == null ||
+          event.searchQuery.length == 0)) {
+        state['ordersListState'] = GlobalFetchingState();
+        yield {...state};
+      } else if (event.searchQuery != null &&
+          event.searchQuery.length > 0 &&
+          state['ordersListState'] is OrdersListFetchedState) {
+        state['ordersListState'] = PartialOrderFetchingState(
+            orderItems: state['ordersListState'].orderItems,
+            orderFilter: state['ordersListState'].orderFilter);
+        yield {...state};
+      }
+      try {
+        var orderList = await orderRepo.fetchOrders(
+            filter: event.filter,
+            startAt: event.startAt,
+            searchQuery: event.searchQuery);
+        if (orderList != null) {
+          if (event.callback != null) {
+            event.callback(orderList);
+          }
+          var newList = [];
+          if (event.startAt != null &&
+              state['ordersListState'] is OrdersListFetchedState &&
+              state['ordersListState'].orderFilter == event.filter) {
+            var oldListing = state['ordersListState'].orderItems;
+            newList.addAll(oldListing);
+          }
+          newList.addAll(orderList);
+          state['ordersListState'] = OrdersListFetchedState(
+              orderItems: newList, orderFilter: event.filter);
+        } else {
+          state['ordersListState'] = GlobalErrorState();
+        }
+      } catch (e) {
+        state['ordersListState'] = GlobalErrorState();
+      }
+      yield {...state};
     }
   }
 }

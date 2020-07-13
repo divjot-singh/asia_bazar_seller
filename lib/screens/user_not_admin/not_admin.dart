@@ -4,7 +4,7 @@ import 'package:asia_bazar_seller/theme/style.dart';
 import 'package:asia_bazar_seller/utils/utilities.dart';
 import 'package:flutter/material.dart';
 
-class IsAdmin extends StatelessWidget {
+class NotAdmin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -27,7 +27,7 @@ class IsAdmin extends StatelessWidget {
                 height: Spacing.space32,
               ),
               Text(
-                L10n().getStr('redirector.userIsAdmin'),
+                L10n().getStr('redirector.userNotAdmin'),
                 textAlign: TextAlign.center,
                 style: theme.textTheme.h2
                     .copyWith(color: theme.colorScheme.textPrimaryLight),
@@ -36,7 +36,7 @@ class IsAdmin extends StatelessWidget {
                 height: Spacing.space16,
               ),
               Text(
-                L10n().getStr('redirector.userIsAdmin.info'),
+                L10n().getStr('redirector.userNotAdmin.info'),
                 textAlign: TextAlign.center,
                 style: theme.textTheme.body1Medium
                     .copyWith(color: theme.colorScheme.textPrimaryLight),

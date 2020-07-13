@@ -1,3 +1,4 @@
+import 'package:asia_bazar_seller/blocs/global_bloc/state.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/bloc.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/events.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/state.dart';
@@ -15,7 +16,7 @@ class Redirector extends StatefulWidget {
 class _RedirectorState extends State<Redirector> {
   @override
   void initState() {
-    BlocProvider.of<UserDatabaseBloc>(context).add(CheckIfAdminOrUser());
+    BlocProvider.of<UserDatabaseBloc>(context).add(CheckIfAdmin());
     super.initState();
   }
 
@@ -25,19 +26,16 @@ class _RedirectorState extends State<Redirector> {
       child: BlocListener<UserDatabaseBloc, Map>(
         listener: (context, currentState) {
           var state = currentState['userstate'];
-          if (state is UserIsAdmin) {
-            Navigator.pushReplacementNamed(context, Constants.ADMIN_PROFILE);
-          } else if (state is UserIsUser) {
+          if (state is UserIsNotAdmin) {
+            Navigator.pushReplacementNamed(context, Constants.USER_NOT_ADMIN);
+          } else if (state is UserIsAdmin) {
             Navigator.pushReplacementNamed(context, Constants.HOME);
-          } else if (state is NewUser) {
-            Navigator.pushReplacementNamed(context, Constants.ADD_ADDRESS,
-                arguments: {'first': true});
           }
         },
         child: BlocBuilder<UserDatabaseBloc, Map>(
           builder: (context, currentState) {
             var state = currentState['userstate'];
-            if (state is ErrorState) {
+            if (state is GlobalErrorState) {
               return PageErrorView();
             }
             return Container(

@@ -1,7 +1,6 @@
 import 'package:asia_bazar_seller/blocs/global_bloc/state.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/bloc.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/events.dart';
-import 'package:asia_bazar_seller/blocs/user_database_bloc/state.dart';
 import 'package:asia_bazar_seller/l10n/l10n.dart';
 import 'package:asia_bazar_seller/shared_widgets/app_bar.dart';
 import 'package:asia_bazar_seller/shared_widgets/page_views.dart';
@@ -11,7 +10,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:asia_bazar_seller/theme/style.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:progress_indicators/progress_indicators.dart';
 
 class OrderList extends StatefulWidget {
   @override
@@ -50,25 +48,7 @@ class _OrderListState extends State<OrderList> {
   }
 
   _fetchMoreItems() {
-    var state = BlocProvider.of<UserDatabaseBloc>(context).state['ordersstate'];
-    if (state is OrdersFetchedState) {
-      var listing = state.orders;
-      DocumentSnapshot lastItem = listing[listing.length - 1];
-
-      BlocProvider.of<UserDatabaseBloc>(context).add(FetchMyOrders(
-          callback: (listing) {
-            setState(() {
-              isFetching = false;
-            });
-            if (listing is List && listing.length == 0) {
-              _scrollController.removeListener(scrollListener);
-            }
-          },
-          startAt: lastItem));
-      setState(() {
-        isFetching = true;
-      });
-    }
+  
   }
 
   Future<void> reloadPage() async {
@@ -250,44 +230,7 @@ class _OrderListState extends State<OrderList> {
               return PageFetchingViewWithLightBg();
             } else if (state is GlobalErrorState) {
               return PageErrorView();
-            } else if (state is OrdersFetchedState) {
-              if (state.orders.length == 0) {
-                return emptyState();
-              } else {
-                List orders = [];
-                orders.addAll(state.orders);
-                return RefreshIndicator(
-                  color: ColorShades.greenBg,
-                  backgroundColor: ColorShades.smokeWhite,
-                  onRefresh: reloadPage,
-                  child: Column(
-                    children: <Widget>[
-                      Expanded(
-                        child: Padding(
-                          padding:
-                              EdgeInsets.symmetric(vertical: Spacing.space20),
-                          child: ListView.builder(
-                            controller: _scrollController,
-                            itemCount: orders.length,
-                            itemBuilder: (context, index) {
-                              var order = orders[index];
-                              return orderCard(order);
-                            },
-                          ),
-                        ),
-                      ),
-                      if (isFetching)
-                        Padding(
-                          padding: EdgeInsets.only(bottom: Spacing.space12),
-                          child: ScalingText(L10n().getStr('app.loading'),
-                              style: theme.textTheme.h3
-                                  .copyWith(color: ColorShades.greenBg)),
-                        ),
-                    ],
-                  ),
-                );
-              }
-            }
+            } 
             return Container();
           },
         ),

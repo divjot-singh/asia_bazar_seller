@@ -1,6 +1,5 @@
 import 'package:asia_bazar_seller/blocs/user_database_bloc/bloc.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/events.dart';
-import 'package:asia_bazar_seller/blocs/user_database_bloc/state.dart';
 import 'package:asia_bazar_seller/l10n/l10n.dart';
 import 'package:asia_bazar_seller/shared_widgets/app_bar.dart';
 import 'package:asia_bazar_seller/shared_widgets/customLoader.dart';
@@ -35,19 +34,8 @@ class _AddressListState extends State<AddressList> {
         ),
         body: BlocBuilder<UserDatabaseBloc, Map>(
           builder: (context, currentState) {
-            var userState = currentState['userstate'];
             List addressList;
-            if (userState is UserIsUser) {
-              addressList = userState.user[KeyNames['address']];
-              addressList.sort((item1, item2) {
-                if (item1['is_default'] == true)
-                  return -1;
-                else if (item2['is_default'] == true)
-                  return 1;
-                else
-                  return 0;
-              });
-            }
+            
             if (selectedAddress == null) selectedAddress = addressList[0];
             return Container(
               padding: EdgeInsets.symmetric(

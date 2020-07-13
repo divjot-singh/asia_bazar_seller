@@ -8,6 +8,7 @@ const Map KeyNames = {
   "address": "address",
   'fcmToken': "fcmToken",
   "cart": "cart",
+  'allOrders': "all",
   'orderPlaced': 'placed',
   'orderApproved': 'approved',
   'orderRejected': 'rejected',
@@ -40,8 +41,10 @@ const ORDER_RETURN_THRESHOLD_IN_DAYS = 1;
 
 class Constants {
   static const AUTHENTICATION_SCREEN = "authenticate";
-  static const EDIT_PROFILE = 'user/edit';
   static const POST_AUTHENTICATION_REDIRECTOR = 'user/redirect';
+  static const USER_NOT_ADMIN = 'user/not_admin';
+  static const EDIT_PROFILE = 'user/edit';
+
   static const ADMIN_PROFILE = 'user/is_admin';
   static const HOME = 'user/home';
   static const ADD_ADDRESS = 'user/add_address';

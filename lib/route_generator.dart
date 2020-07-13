@@ -1,4 +1,3 @@
-
 import 'package:asia_bazar_seller/screens/add_address/index.dart';
 import 'package:asia_bazar_seller/screens/address_list/index.dart';
 import 'package:asia_bazar_seller/screens/all_search/index.dart';
@@ -12,8 +11,9 @@ import 'package:asia_bazar_seller/screens/order_details/index.dart';
 import 'package:asia_bazar_seller/screens/order_details/item_details.dart';
 import 'package:asia_bazar_seller/screens/order_list/index.dart';
 import 'package:asia_bazar_seller/screens/redirector/index.dart';
+import 'package:asia_bazar_seller/screens/search_orders/index.dart';
 import 'package:asia_bazar_seller/screens/update_profile/index.dart';
-import 'package:asia_bazar_seller/screens/user_is_admin/is_admin.dart';
+import 'package:asia_bazar_seller/screens/user_not_admin/not_admin.dart';
 import 'package:asia_bazar_seller/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
@@ -43,12 +43,18 @@ class FluroRouter {
             return UpdateProfile();
           },
         );
-      case Constants.ADMIN_PROFILE:
+      case Constants.USER_NOT_ADMIN:
         return Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-            return IsAdmin();
+            return NotAdmin();
           },
         );
+      // case Constants.SEARCH_ORDER:
+      //   return Handler(
+      //     handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+      //       return SearchOrders();
+      //     },
+      //   );
       case Constants.SEARCH:
         return Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
@@ -136,8 +142,8 @@ class FluroRouter {
       transitionType: TransitionType.fadeIn,
     );
     router.define(
-      Constants.ADMIN_PROFILE,
-      handler: getCommonHandler(Constants.ADMIN_PROFILE),
+      Constants.USER_NOT_ADMIN,
+      handler: getCommonHandler(Constants.USER_NOT_ADMIN),
       transitionType: TransitionType.fadeIn,
     );
     router.define(
@@ -150,6 +156,11 @@ class FluroRouter {
       handler: getCommonHandler(Constants.CART),
       transitionType: TransitionType.inFromBottom,
     );
+    // router.define(
+    //   Constants.SEARCH_ORDER,
+    //   handler: getCommonHandler(Constants.SEARCH_ORDER),
+    //   transitionType: TransitionType.inFromBottom,
+    // );
 
     router.define(
       Constants.POST_AUTHENTICATION_REDIRECTOR,

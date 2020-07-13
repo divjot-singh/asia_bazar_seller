@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 abstract class OrderEvent {}
@@ -8,8 +9,3 @@ class FetchOrderDetails extends OrderEvent {
   FetchOrderDetails({@required this.orderId, this.addListener = true});
 }
 
-class FetchOrderItems extends OrderEvent {
-  String orderId;
-  Function callback;
-  FetchOrderItems({@required this.orderId, this.callback});
-}

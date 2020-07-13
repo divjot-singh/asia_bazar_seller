@@ -1,20 +1,11 @@
 import 'package:asia_bazar_seller/blocs/global_bloc/bloc.dart';
 import 'package:asia_bazar_seller/blocs/global_bloc/events.dart';
-import 'package:asia_bazar_seller/blocs/global_bloc/state.dart';
 import 'package:asia_bazar_seller/blocs/order_bloc/bloc.dart';
 import 'package:asia_bazar_seller/blocs/order_bloc/event.dart';
-import 'package:asia_bazar_seller/blocs/order_bloc/state.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/bloc.dart';
-import 'package:asia_bazar_seller/blocs/user_database_bloc/state.dart';
 import 'package:asia_bazar_seller/l10n/l10n.dart';
-import 'package:asia_bazar_seller/shared_widgets/app_bar.dart';
-import 'package:asia_bazar_seller/shared_widgets/checkbox_list.dart';
-import 'package:asia_bazar_seller/shared_widgets/custom_dialog.dart';
-import 'package:asia_bazar_seller/shared_widgets/page_views.dart';
 import 'package:asia_bazar_seller/shared_widgets/primary_button.dart';
-import 'package:asia_bazar_seller/shared_widgets/quantity_updater.dart';
 import 'package:asia_bazar_seller/theme/style.dart';
-import 'package:asia_bazar_seller/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -40,8 +31,8 @@ class _OrderItemDetailsState extends State<OrderItemDetails> {
   var address;
   @override
   void initState() {
-    BlocProvider.of<OrderDetailsBloc>(context).add(
-        FetchOrderItems(orderId: widget.orderId, callback: fetchItemsCallback));
+    // BlocProvider.of<OrderDetailsBloc>(context).add(
+    //     FetchOrderItems(orderId: widget.orderId, callback: fetchItemsCallback))s;
     BlocProvider.of<GlobalBloc>(context)
         .add(FetchSellerInfo(callback: fetchSellerCallback));
     super.initState();
@@ -359,19 +350,8 @@ class _OrderItemDetailsState extends State<OrderItemDetails> {
 
   confirmExchangeReturn(type) {
     if (type == 'return') {
-      var exchangeItems = selectedItems.map((item) {
-        return {
-          'price': item['price'],
-          'returnQuantity': item['returnQuantity'],
-          'opc': item['id'].toString(),
-        };
-      });
-      var orderRef = selectedItems[0]['item']['orderData'].data['orderRef'];
-      var exchangeOrders = {
-        'items': exchangeItems,
-        'orderId': widget.orderId,
-        'orderRef': orderRef
-      };
+     
+      
     } else {}
   }
 
@@ -381,269 +361,7 @@ class _OrderItemDetailsState extends State<OrderItemDetails> {
     totalCost = 0;
     theme = Theme.of(context);
     return BlocBuilder<UserDatabaseBloc, Map>(builder: (context, state) {
-      var currentState = state['userstate'];
-      if (currentState is UserIsUser) {
-        currentUser = currentState.user;
-        List addressList = currentUser[KeyNames['address']];
-        address = addressList.firstWhere((item) => item['is_default'] == true);
-        return SafeArea(
-          child: BlocBuilder<OrderDetailsBloc, Map>(
-            builder: (context, state) {
-              var currentState = state['itemState'];
-              if (currentState is GlobalFetchingState) {
-                return Container(
-                    color: ColorShades.white,
-                    child: PageFetchingViewWithLightBg());
-              } else if (currentState is GlobalErrorState) {
-                return PageErrorView();
-              } else if (currentState is ItemFetchedState &&
-                  currentState.orderId == widget.orderId) {
-                if (currentState.orderItems.length > 0) {
-                  return Scaffold(
-                    backgroundColor: ColorShades.white,
-                    appBar: MyAppBar(
-                      hasTransparentBackground: true,
-                      title: L10n().getStr('orderItems.heading'),
-                    ),
-                    body: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          SizedBox(
-                            height: Spacing.space16,
-                          ),
-                          if (widget.editView)
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  bottom: Spacing.space20,
-                                  left: Spacing.space16),
-                              child: Text(
-                                L10n().getStr('orderDetails.chooseItems'),
-                                style: theme.textTheme.h4
-                                    .copyWith(color: ColorShades.bastille),
-                              ),
-                            ),
-                          ...currentState.orderItems.map((item) {
-                            if (widget.editView) {
-                              var cartItem =
-                                  item['orderData'].data['itemDetails'];
-                              var itemSelected = selectedItems != null
-                                  ? selectedItems.firstWhere(
-                                      (item) =>
-                                          item['id'] ==
-                                          cartItem['opc'].toString(),
-                                      orElse: () => null)
-                                  : {};
-                              int availableQuantity =
-                                  item['itemData'].data['quantity'];
-                              bool isItemSelected = itemSelected != null;
-                              int selectedQuantity = isItemSelected
-                                  ? itemSelected['returnQuantity']
-                                  : 0;
-                              bool outOfStock = availableQuantity <= 0;
-                              if (outOfStock && isItemSelected)
-                                selectedItems.removeWhere(
-                                    (item) => item['id'] == itemSelected['id']);
-                              return Container(
-                                color: outOfStock
-                                    ? ColorShades.grey100
-                                    : ColorShades.white,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: Spacing.space16),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Flexible(
-                                      flex: 1,
-                                      child: outOfStock
-                                          ? Container(
-                                              child: Center(
-                                                  child: Text(
-                                                L10n()
-                                                    .getStr('item.outOfStock'),
-                                                style: theme
-                                                    .textTheme.body1Medium
-                                                    .copyWith(
-                                                  color: ColorShades.redOrange,
-                                                ),
-                                              )),
-                                            )
-                                          : Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Container(
-                                                  height: 24,
-                                                  width: 24,
-                                                  child: Center(
-                                                    child: Checkbox(
-                                                      onChanged: (selected) {
-                                                        if (selected) {
-                                                          selectedItems.add({
-                                                            'id':
-                                                                cartItem['opc']
-                                                                    .toString(),
-                                                            'price': cartItem[
-                                                                'price'],
-                                                            'returnQuantity':
-                                                                cartItem[
-                                                                    'cartQuantity'],
-                                                            'item': item
-                                                          });
-                                                          setState(() {
-                                                            selectedItems = [
-                                                              ...selectedItems
-                                                            ];
-                                                          });
-                                                        } else {
-                                                          List newItems = [
-                                                            ...selectedItems
-                                                          ];
-                                                          newItems.removeWhere(
-                                                              (item) =>
-                                                                  item['id'] ==
-                                                                  cartItem[
-                                                                          'opc']
-                                                                      .toString());
-                                                          setState(() {
-                                                            selectedItems =
-                                                                newItems;
-                                                          });
-                                                        }
-                                                      },
-                                                      activeColor:
-                                                          ColorShades.greenBg,
-                                                      value: isItemSelected,
-                                                    ),
-                                                  ),
-                                                ),
-                                                if (cartItem['cartQuantity'] >
-                                                        1 &&
-                                                    isItemSelected)
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                        top: Spacing.space8),
-                                                    child: QuantityUpdater(
-                                                      subtractHandler: () {
-                                                        Map currentItem = {
-                                                          ...itemSelected
-                                                        };
-                                                        currentItem[
-                                                                'returnQuantity'] =
-                                                            currentItem[
-                                                                    'returnQuantity'] -
-                                                                1;
-                                                        List allItems =
-                                                            selectedItems
-                                                                .map((item) {
-                                                          if (item['id'] ==
-                                                              itemSelected[
-                                                                  'id']) {
-                                                            item['returnQuantity'] -=
-                                                                1;
-                                                          }
-                                                          return item;
-                                                        }).toList();
-                                                        setState(() {
-                                                          selectedItems =
-                                                              allItems;
-                                                        });
-                                                      },
-                                                      addHandler: (
-                                                          {int value}) {
-                                                        Map currentItem = {
-                                                          ...itemSelected
-                                                        };
-                                                        currentItem[
-                                                                'returnQuantity'] =
-                                                            currentItem[
-                                                                    'returnQuantity'] -
-                                                                1;
-                                                        List allItems =
-                                                            selectedItems
-                                                                .map((item) {
-                                                          if (item['id'] ==
-                                                              itemSelected[
-                                                                  'id']) {
-                                                            item['returnQuantity'] =
-                                                                value != null
-                                                                    ? value
-                                                                    : item['returnQuantity'] +
-                                                                        1;
-                                                          }
-                                                          return item;
-                                                        }).toList();
-                                                        setState(() {
-                                                          selectedItems =
-                                                              allItems;
-                                                        });
-                                                      },
-                                                      quantity:
-                                                          selectedQuantity,
-                                                      maxQuantity: cartItem[
-                                                          'cartQuantity'],
-                                                      showAdd: selectedQuantity !=
-                                                          cartItem[
-                                                              'cartQuantity'],
-                                                      showMinus:
-                                                          selectedQuantity !=
-                                                                  null &&
-                                                              selectedQuantity >
-                                                                  1,
-                                                    ),
-                                                  ),
-                                              ],
-                                            ),
-                                    ),
-                                    Flexible(
-                                      flex: 3,
-                                      child: itemTile(item),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-                            return itemTile(item);
-                          }),
-                          if (!widget.editView)
-                            ...totalCalculations()
-                          else
-                            ...returnCalculations()
-                        ],
-                      ),
-                    ),
-                    bottomNavigationBar: widget.editView
-                        ? BottomAppBar(
-                            child: Container(
-                              height: 75,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: Spacing.space16,
-                                  vertical: Spacing.space16),
-                              color: ColorShades.greenBg,
-                              child: PrimaryButton(
-                                text: L10n().getStr('onboarding.next'),
-                                onPressed: () {
-                                  showCustomDialog(
-                                      context: context,
-                                      heading: '',
-                                      child: ExchangeReturnDialog(
-                                        onSelect: confirmExchangeReturn,
-                                      ));
-                                },
-                              ),
-                            ),
-                          )
-                        : null,
-                  );
-                }
-                return PageEmptyView();
-              }
-              return Container();
-            },
-          ),
-        );
-      }
+   
       return Container();
     });
   }

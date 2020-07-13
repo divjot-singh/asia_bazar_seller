@@ -1,15 +1,13 @@
-import 'package:asia_bazar_seller/blocs/global_bloc/state.dart';
+
 import 'package:asia_bazar_seller/blocs/item_database_bloc/bloc.dart';
 import 'package:asia_bazar_seller/blocs/item_database_bloc/event.dart';
 import 'package:asia_bazar_seller/blocs/item_database_bloc/state.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/bloc.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/events.dart';
-import 'package:asia_bazar_seller/blocs/user_database_bloc/state.dart';
+
 import 'package:asia_bazar_seller/l10n/l10n.dart';
-import 'package:asia_bazar_seller/shared_widgets/app_bar.dart';
+
 import 'package:asia_bazar_seller/shared_widgets/customLoader.dart';
-import 'package:asia_bazar_seller/shared_widgets/input_box.dart';
-import 'package:asia_bazar_seller/shared_widgets/page_views.dart';
 import 'package:asia_bazar_seller/shared_widgets/primary_button.dart';
 import 'package:asia_bazar_seller/shared_widgets/quantity_updater.dart';
 import 'package:asia_bazar_seller/shared_widgets/snackbar.dart';
@@ -19,8 +17,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:asia_bazar_seller/theme/style.dart';
-import 'package:flutter_picker/flutter_picker.dart';
-import 'package:progress_indicators/progress_indicators.dart';
 
 class CategoryListing extends StatefulWidget {
   final String categoryId, categoryName;
@@ -117,178 +113,7 @@ class _CategoryListingState extends State<CategoryListing> {
     theme = Theme.of(context);
     return SafeArea(
       child: BlocBuilder<UserDatabaseBloc, Map>(builder: (context, state) {
-        var currentState = state['userstate'];
-        if (currentState is UserIsUser) {
-          var user = currentState.user;
-          return Scaffold(
-            body: Scaffold(
-              backgroundColor: ColorShades.white,
-              appBar: MyAppBar(
-                hasTransparentBackground: true,
-                title: widget.categoryName,
-              ),
-              body: Container(
-                child: BlocBuilder<ItemDatabaseBloc, Map>(
-                  builder: (context, state) {
-                    var currentState = state['categoryListing'];
-                    if (currentState is GlobalFetchingState) {
-                      return PageFetchingViewWithLightBg();
-                    } else if (currentState is GlobalErrorState) {
-                      return PageErrorView();
-                    } else if ((currentState is CategoryListingFetchedState ||
-                            currentState is PartialFetchingState) &&
-                        currentState.categoryId == widget.categoryId) {
-                      var listing = currentState.categoryItems;
-                      return Column(
-                        children: <Widget>[
-                          SizedBox(
-                            height: Spacing.space16,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: Spacing.space16),
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: InputBox(
-                                    controller: _textController,
-                                    onChanged: (query) {
-                                      searchQuery = query;
-                                      if (query.length > 2 ||
-                                          query.length == 0) {
-                                        searchItems(query);
-                                      }
-                                    },
-                                    suffixIcon: _textController.text.length > 0
-                                        ? IconButton(
-                                            icon: Icon(
-                                              Icons.close,
-                                              color: ColorShades.greenBg,
-                                            ),
-                                            onPressed: () {
-                                              searchItems('');
-                                              _textController.text = '';
-                                            },
-                                          )
-                                        : null,
-                                    hideShadow: true,
-                                    hintText: L10n().getStr('category.search',
-                                        {'category': widget.categoryName}),
-                                    prefixIcon: Icon(
-                                      Icons.search,
-                                      color: ColorShades.greenBg,
-                                    ),
-                                  ),
-                                ),
-                                // SizedBox(
-                                //   width: Spacing.space8,
-                                // ),
-                                //Text(listing.length.toString()),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: Spacing.space12,
-                          ),
-                          if (currentState is PartialFetchingState)
-                            Expanded(
-                                child: Center(
-                                    child: PageFetchingViewWithLightBg()))
-                          else if (currentState
-                                  is CategoryListingFetchedState &&
-                              currentState.categoryItems.length == 0)
-                            Expanded(
-                                child: SingleChildScrollView(
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Image.asset('assets/images/no_list.png'),
-                                    SizedBox(
-                                      height: Spacing.space16,
-                                    ),
-                                    Text(
-                                      L10n().getStr('list.empty'),
-                                      textAlign: TextAlign.center,
-                                      style: theme.textTheme.h4
-                                          .copyWith(color: ColorShades.greenBg),
-                                    )
-                                  ]),
-                            ))
-                          else
-                            Expanded(
-                              child: RefreshIndicator(
-                                color: ColorShades.greenBg,
-                                backgroundColor: ColorShades.smokeWhite,
-                                onRefresh: reloadPage,
-                                child: ListView.builder(
-                                  controller: _scrollController,
-                                  itemCount: listing.length,
-                                  itemBuilder: (context, index) {
-                                    var item = listing[index].data;
-                                    return listItem(
-                                        context: context,
-                                        item: item,
-                                        user: user);
-                                  },
-                                ),
-                              ),
-                            ),
-                          SizedBox(
-                            height: Spacing.space8,
-                          ),
-                          if (isFetching &&
-                              currentState is CategoryListingFetchedState)
-                            Padding(
-                              padding: EdgeInsets.only(bottom: Spacing.space12),
-                              child: ScalingText(L10n().getStr('app.loading'),
-                                  style: theme.textTheme.h3
-                                      .copyWith(color: ColorShades.greenBg)),
-                            ),
-                        ],
-                      );
-                    }
-                    return Container();
-                  },
-                ),
-              ),
-              floatingActionButton:
-                  user['cart'] != null && user['cart'].length > 0
-                      ? FloatingActionButton.extended(
-                          onPressed: () {
-                            Navigator.pushNamed(context, Constants.CART);
-                          },
-                          backgroundColor: ColorShades.greenBg,
-                          icon: Icon(
-                            Icons.shopping_cart,
-                            color: ColorShades.white,
-                          ),
-                          label: Text(L10n().getStr('listing.goToCart'),
-                              style: theme.textTheme.body1Medium.copyWith(
-                                color: ColorShades.white,
-                              )))
-                      : null,
-            ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerFloat,
-            floatingActionButton: showScrollUp
-                ? FloatingActionButton(
-                    onPressed: () {
-                      _scrollController.animateTo(0,
-                          duration: Duration(
-                            seconds: 1,
-                          ),
-                          curve: Curves.bounceOut);
-                    },
-                    child: Icon(
-                      Icons.keyboard_arrow_up,
-                      size: 24,
-                      color: ColorShades.greenBg,
-                    ),
-                  )
-                : null,
-          );
-        }
+
         return Container();
       }),
     );
@@ -325,25 +150,6 @@ Widget listItem(
         }));
   }
 
-  showPickerNumber(BuildContext context, {@required Map cartItem}) {
-    cartItem = {...cartItem};
-    var initValue = cartItem['cartQuantity'];
-    Picker(
-        adapter: NumberPickerAdapter(data: [
-          NumberPickerColumn(
-            begin: 1,
-            initValue: initValue,
-            end: 50,
-          ),
-        ]),
-        hideHeader: true,
-        title: Text(L10n().getStr('item.selectQuantity')),
-        selectedTextStyle: TextStyle(color: Colors.blue),
-        onConfirm: (Picker picker, List value) {
-          cartItem['cartQuantity'] = value[0] + 1;
-          addItemToCart(cartItem);
-        }).showDialog(context);
-  }
 
   var cart = user['cart'];
   var cost = item['cost'] is String

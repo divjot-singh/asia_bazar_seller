@@ -19,52 +19,53 @@ class _UpdateProfileState extends State<UpdateProfile> {
   bool nameEditable = false;
   GlobalKey key = GlobalKey<FormState>();
   String username, phone;
-  Map defaultAddress;
   List<Widget> getAddressBox() {
     ThemeData theme = Theme.of(context);
-    if (defaultAddress != null) {
-      return [
-        Flexible(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(L10n().getStr('editProfile.defaultAddress'),
-                  style:
-                      theme.textTheme.h4.copyWith(color: ColorShades.greenBg)),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, Constants.ADDRESS_LIST);
-                },
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      L10n().getStr('editProfile.more'),
-                      style: theme.textTheme.body2Regular
-                          .copyWith(color: ColorShades.greenBg),
-                    ),
-                    SizedBox(
-                      width: Spacing.space4,
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      size: 12,
-                      color: ColorShades.greenBg,
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
+
+    return [
+      Flexible(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(L10n().getStr('editProfile.defaultAddress'),
+                style: theme.textTheme.h4.copyWith(color: ColorShades.greenBg)),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, Constants.ADDRESS_LIST);
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    L10n().getStr('editProfile.more'),
+                    style: theme.textTheme.body2Regular
+                        .copyWith(color: ColorShades.greenBg),
+                  ),
+                  SizedBox(
+                    width: Spacing.space4,
+                  ),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: 12,
+                    color: ColorShades.greenBg,
+                  )
+                ],
+              ),
+            )
+          ],
         ),
-        SizedBox(
-          height: Spacing.space12,
-        ),
-        getAddressCard(
-            context: context, address: defaultAddress, hideOptions: true),
-      ].toList();
-    }
-    return [];
+      ),
+      SizedBox(
+        height: Spacing.space12,
+      ),
+    ].toList();
+  }
+
+  @override
+  void dispose() {
+    key = null;
+    username = null;
+    super.dispose();
   }
 
   @override
@@ -87,11 +88,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
               var userState = currentState['userstate'];
               username = userState.user[KeyNames['userName']];
               phone = userState.user[KeyNames['phone']];
-              var addressList = userState.user['address'];
-              if (addressList is List) {
-                defaultAddress = addressList
-                    .firstWhere((item) => item['is_default'] == true);
-              }
+
               return Container(
                 padding: EdgeInsets.symmetric(
                     horizontal: Spacing.space16, vertical: Spacing.space20),
@@ -189,7 +186,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
                     SizedBox(
                       height: Spacing.space20,
                     ),
-                    ...getAddressBox(),
                   ],
                 ),
               );

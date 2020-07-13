@@ -39,3 +39,16 @@ class PartialFetchingState {
   String categoryId;
   PartialFetchingState({@required this.categoryItems, this.categoryId});
 }
+
+class OrdersListFetchedState extends ItemDatabaseState {
+  List orderItems;
+  String orderFilter;
+  OrdersListFetchedState({this.orderFilter, @required this.orderItems});
+}
+
+class PartialOrderFetchingState {
+  List orderItems;
+  String orderFilter;
+  PartialOrderFetchingState(
+      {@required this.orderItems, @required this.orderFilter});
+}
