@@ -224,7 +224,7 @@ class AuthRepo {
 
     if (firebaseToken != null) {
       await Firestore.instance
-          .collection('usersTokens')
+          .collection('adminTokens')
           .document(userId)
           .setData({
         'user_id': userId,
