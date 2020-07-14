@@ -21,6 +21,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_sim_country_code/flutter_sim_country_code.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -30,7 +31,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   ThemeData theme;
-  String usertoken;
+  String usertoken, countryCode = '';
   TextEditingController _controller = TextEditingController(text: '');
   String currentFilter = KeyNames['orderPlaced'];
   ScrollController _scrollController = ScrollController();
@@ -52,10 +53,24 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     _controller.text = '';
+    fetchCountryCode();
     fetchCurrentFilterOrders();
     _scrollController.addListener(scrollListener);
 
     super.initState();
+  }
+
+  fetchCountryCode() async {
+    try {
+      String countrycode = await FlutterSimCountryCode.simCountryCode;
+      Map dialCode = Countries.firstWhere(
+          (item) => item['code'].toLowerCase() == countrycode.toLowerCase());
+      setState(() {
+        countryCode = dialCode['dial_code'];
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -85,10 +100,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> fetchCurrentFilterOrders({DocumentSnapshot startAt}) async {
+    String searchQuery = countryCode != null && countryCode.length > 0
+        ? countryCode + _controller.text
+        : _controller.text;
     BlocProvider.of<ItemDatabaseBloc>(context).add(FetchOrdersFiltered(
         filter: currentFilter,
         startAt: startAt,
-        searchQuery: _controller.text.length > 2 ? _controller.text : null,
+        searchQuery: searchQuery.length > 4 ? searchQuery : null,
         callback: (data) {
           if (data.length == 0) {
             _scrollController.removeListener(scrollListener);
@@ -291,11 +309,35 @@ class _HomeScreenState extends State<HomeScreen> {
                                     },
                                     controller: _controller,
                                     hideShadow: true,
-                                    hintText: L10n().getStr('home.search'),
-                                    prefixIcon: Icon(
-                                      Icons.search,
-                                      color: ColorShades.greenBg,
-                                    ),
+                                    hintText: countryCode != null &&
+                                            countryCode.length > 0
+                                        ? L10n().getStr('home.search')
+                                        : L10n().getStr(
+                                            'home.searchWithCountryCode'),
+                                    prefixIcon: countryCode != null &&
+                                            countryCode.length > 0
+                                        ? Container(
+                                            width: 50,
+                                            margin: EdgeInsets.only(
+                                                right: Spacing.space12),
+                                            child: InputBox(
+                                              hideShadow: true,
+                                              value: countryCode,
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(16),
+                                                  bottomLeft:
+                                                      Radius.circular(16)),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  countryCode = value;
+                                                });
+                                              },
+                                            ),
+                                          )
+                                        : Icon(
+                                            Icons.search,
+                                            color: ColorShades.greenBg,
+                                          ),
                                   ),
                                 )
                               : Container(),
@@ -333,16 +375,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             PageFetchingViewWithLightBg()
                           else
                             Expanded(
-                              child: Column(
-                                children: <Widget>[
-                                  Image.asset('assets/images/no_orders.png'),
-                                  Text(
-                                    L10n().getStr('home.drawer.noOrder',
-                                        {'type': currentFilter}),
-                                    style: theme.textTheme.h4
-                                        .copyWith(color: ColorShades.greenBg),
-                                  )
-                                ],
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: <Widget>[
+                                    Image.asset('assets/images/no_orders.png'),
+                                    Text(
+                                      L10n().getStr('home.drawer.noOrder',
+                                          {'type': currentFilter}),
+                                      style: theme.textTheme.h4
+                                          .copyWith(color: ColorShades.greenBg),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           SizedBox(

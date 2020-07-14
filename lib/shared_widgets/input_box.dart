@@ -21,12 +21,14 @@ class InputBox extends StatelessWidget {
   final suffixIcon, maxLines, prefixIcon;
   final keyboardAppearance;
   final bool hideShadow;
+  final BorderRadius borderRadius;
   TextEditingController controller;
   InputBox(
       {this.label,
       this.labelColor,
       this.hintText,
       this.margin,
+      this.borderRadius,
       this.validator,
       this.hideShadow = false,
       this.disabled = false,
@@ -103,33 +105,43 @@ class InputBox extends StatelessWidget {
                     disabled ? theme.colorScheme.disabled : ColorShades.white,
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: ColorShades.greenBg),
-                  borderRadius: const BorderRadius.all(
-                    const Radius.circular(16.0),
-                  ),
+                  borderRadius: borderRadius != null
+                      ? borderRadius
+                      : BorderRadius.all(
+                          const Radius.circular(16.0),
+                        ),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: ColorShades.greenBg),
-                  borderRadius: const BorderRadius.all(
-                    const Radius.circular(16.0),
-                  ),
+                  borderRadius: borderRadius != null
+                      ? borderRadius
+                      : BorderRadius.all(
+                          const Radius.circular(16.0),
+                        ),
                 ),
                 errorBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: theme.colorScheme.error),
-                  borderRadius: const BorderRadius.all(
-                    const Radius.circular(16.0),
-                  ),
+                  borderRadius: borderRadius != null
+                      ? borderRadius
+                      : BorderRadius.all(
+                          const Radius.circular(16.0),
+                        ),
                 ),
                 focusedErrorBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: theme.colorScheme.error),
-                  borderRadius: const BorderRadius.all(
-                    const Radius.circular(16.0),
-                  ),
+                  borderRadius: borderRadius != null
+                      ? borderRadius
+                      : BorderRadius.all(
+                          const Radius.circular(16.0),
+                        ),
                 ),
                 disabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.transparent),
-                  borderRadius: const BorderRadius.all(
-                    const Radius.circular(16.0),
-                  ),
+                  borderRadius: borderRadius != null
+                      ? borderRadius
+                      : BorderRadius.all(
+                          const Radius.circular(16.0),
+                        ),
                 ),
               ),
               onChanged: onChanged,

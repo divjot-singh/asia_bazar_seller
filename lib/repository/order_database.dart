@@ -39,9 +39,8 @@ class OrderDatabaseRepo {
       int limit = 20;
       if (searchQuery != null && searchQuery.length > 0) {
         limit = 50;
-        query = orderRef
-            .orderBy('phoneNumber')
-            .startAt([searchQuery]).orderBy('timestamp', descending: true);
+        query = orderRef.orderBy('phoneNumber').startAt([searchQuery]).endAt(
+            [searchQuery + '\uf8ff']).orderBy('timestamp', descending: true);
       } else {
         query = orderRef.orderBy('timestamp', descending: true);
       }
