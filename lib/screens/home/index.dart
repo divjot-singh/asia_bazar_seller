@@ -1,12 +1,9 @@
-import 'package:asia_bazar_seller/blocs/global_bloc/bloc.dart';
-import 'package:asia_bazar_seller/blocs/global_bloc/events.dart';
+
 import 'package:asia_bazar_seller/blocs/global_bloc/state.dart';
 import 'package:asia_bazar_seller/blocs/item_database_bloc/bloc.dart';
 import 'package:asia_bazar_seller/blocs/item_database_bloc/event.dart';
 import 'package:asia_bazar_seller/blocs/item_database_bloc/state.dart';
-import 'package:asia_bazar_seller/blocs/order_bloc/bloc.dart';
-import 'package:asia_bazar_seller/blocs/order_bloc/event.dart';
-import 'package:asia_bazar_seller/blocs/order_bloc/state.dart';
+
 import 'package:asia_bazar_seller/l10n/l10n.dart';
 import 'package:asia_bazar_seller/shared_widgets/app_bar.dart';
 import 'package:asia_bazar_seller/shared_widgets/app_drawer.dart';
@@ -18,7 +15,6 @@ import 'package:asia_bazar_seller/utils/constants.dart';
 import 'package:asia_bazar_seller/utils/date_utils.dart';
 import 'package:asia_bazar_seller/utils/deboucer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_sim_country_code/flutter_sim_country_code.dart';

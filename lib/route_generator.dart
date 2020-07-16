@@ -1,17 +1,9 @@
-import 'package:asia_bazar_seller/screens/add_address/index.dart';
-import 'package:asia_bazar_seller/screens/address_list/index.dart';
-import 'package:asia_bazar_seller/screens/all_search/index.dart';
 import 'package:asia_bazar_seller/screens/authentication_screen/authentication_screen.dart';
-import 'package:asia_bazar_seller/screens/cart/index.dart';
-import 'package:asia_bazar_seller/screens/category_listing/index.dart';
-import 'package:asia_bazar_seller/screens/checkout/index.dart';
+
 import 'package:asia_bazar_seller/screens/home/index.dart';
-import 'package:asia_bazar_seller/screens/onboarding/index.dart';
 import 'package:asia_bazar_seller/screens/order_details/index.dart';
 import 'package:asia_bazar_seller/screens/order_details/item_details.dart';
-import 'package:asia_bazar_seller/screens/order_list/index.dart';
 import 'package:asia_bazar_seller/screens/redirector/index.dart';
-import 'package:asia_bazar_seller/screens/search_orders/index.dart';
 import 'package:asia_bazar_seller/screens/update_profile/index.dart';
 import 'package:asia_bazar_seller/screens/user_not_admin/not_admin.dart';
 import 'package:asia_bazar_seller/utils/constants.dart';
@@ -49,36 +41,7 @@ class FluroRouter {
             return NotAdmin();
           },
         );
-      // case Constants.SEARCH_ORDER:
-      //   return Handler(
-      //     handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-      //       return SearchOrders();
-      //     },
-      //   );
-      case Constants.SEARCH:
-        return Handler(
-          handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-            return SearchItems();
-          },
-        );
-      case Constants.CART:
-        return Handler(
-          handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-            return Cart();
-          },
-        );
-      case Constants.ONBOARDING:
-        return Handler(
-          handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-            return Onboarding();
-          },
-        );
-      case Constants.ORDER_LIST:
-        return Handler(
-          handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-            return OrderList();
-          },
-        );
+
       case Constants.ORDER_DETAILS:
         return Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
@@ -101,15 +64,7 @@ class FluroRouter {
                 ));
           },
         );
-      case Constants.CATEGORY_LISTING:
-        return Handler(
-          handlerFunc: (BuildContext context, Map<String, dynamic> params) {
-            return CategoryListing(
-              categoryId: params['categoryId'][0],
-              categoryName: params['categoryName'][0],
-            );
-          },
-        );
+
       case Constants.POST_AUTHENTICATION_REDIRECTOR:
         return Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
@@ -146,57 +101,25 @@ class FluroRouter {
       handler: getCommonHandler(Constants.USER_NOT_ADMIN),
       transitionType: TransitionType.fadeIn,
     );
-    router.define(
-      Constants.SEARCH,
-      handler: getCommonHandler(Constants.SEARCH),
-      transitionType: TransitionType.inFromBottom,
-    );
-    router.define(
-      Constants.CART,
-      handler: getCommonHandler(Constants.CART),
-      transitionType: TransitionType.inFromBottom,
-    );
-    // router.define(
-    //   Constants.SEARCH_ORDER,
-    //   handler: getCommonHandler(Constants.SEARCH_ORDER),
-    //   transitionType: TransitionType.inFromBottom,
-    // );
 
     router.define(
       Constants.POST_AUTHENTICATION_REDIRECTOR,
       handler: getCommonHandler(Constants.POST_AUTHENTICATION_REDIRECTOR),
       transitionType: TransitionType.fadeIn,
     );
-    router.define(
-      Constants.ADD_ADDRESS,
-      handler: getCommonHandler(Constants.ADD_ADDRESS),
-      transitionType: TransitionType.inFromBottom,
-    );
+
     router.define(
       Constants.ORDER_DETAILS,
       handler: getCommonHandler(Constants.ORDER_DETAILS),
       transitionType: TransitionType.inFromBottom,
     );
-    router.define(
-      Constants.CATEGORY_LISTING,
-      handler: getCommonHandler(Constants.CATEGORY_LISTING),
-      transitionType: TransitionType.fadeIn,
-    );
-    router.define(
-      Constants.ONBOARDING,
-      handler: getCommonHandler(Constants.ONBOARDING),
-      transitionType: TransitionType.cupertinoFullScreenDialog,
-    );
+
     router.define(
       Constants.ORDER_ITEM_DETAILS,
       handler: getCommonHandler(Constants.ORDER_ITEM_DETAILS),
       transitionType: TransitionType.cupertinoFullScreenDialog,
     );
-    router.define(
-      Constants.ORDER_LIST,
-      handler: getCommonHandler(Constants.ORDER_LIST),
-      transitionType: TransitionType.inFromLeft,
-    );
+
     router.define(
       '/',
       handler: getCommonHandler(Constants.AUTHENTICATION_SCREEN),
@@ -209,32 +132,6 @@ class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     String routeName = settings.name;
     switch (routeName) {
-      case Constants.ADDRESS_LIST:
-        return MaterialPageRoute(builder: (_) {
-          Map<String, dynamic> arguments =
-              settings.arguments != null ? settings.arguments : {};
-          return AddressList(
-              selectView: arguments['selectView'] != null
-                  ? arguments['selectView']
-                  : false);
-        });
-      case Constants.CHECKOUT:
-        return MaterialPageRoute(builder: (_) {
-          Map<String, dynamic> arguments =
-              settings.arguments != null ? settings.arguments : {};
-          return Checkout(amount: arguments['amount']);
-        });
-      case Constants.ADD_ADDRESS:
-        return MaterialPageRoute(builder: (_) {
-          Map<String, dynamic> arguments =
-              settings.arguments != null ? settings.arguments : {};
-          return AddAddress(
-            isEdit: arguments['isEdit'],
-            first: arguments['first'],
-            address: arguments['address'],
-          );
-        });
-
       default:
         return FluroRouter.router.generator(settings);
     }

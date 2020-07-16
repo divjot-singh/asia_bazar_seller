@@ -1,7 +1,6 @@
 import 'package:asia_bazar_seller/blocs/user_database_bloc/bloc.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/events.dart';
 import 'package:asia_bazar_seller/l10n/l10n.dart';
-import 'package:asia_bazar_seller/screens/address_list/index.dart';
 import 'package:asia_bazar_seller/shared_widgets/app_bar.dart';
 import 'package:asia_bazar_seller/shared_widgets/customLoader.dart';
 import 'package:asia_bazar_seller/shared_widgets/input_box.dart';

@@ -1,7 +1,5 @@
 import 'package:asia_bazar_seller/blocs/global_bloc/bloc.dart';
 import 'package:asia_bazar_seller/blocs/global_bloc/events.dart';
-import 'package:asia_bazar_seller/blocs/order_bloc/bloc.dart';
-import 'package:asia_bazar_seller/blocs/order_bloc/event.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/bloc.dart';
 import 'package:asia_bazar_seller/l10n/l10n.dart';
 import 'package:asia_bazar_seller/shared_widgets/primary_button.dart';
@@ -350,8 +348,6 @@ class _OrderItemDetailsState extends State<OrderItemDetails> {
 
   confirmExchangeReturn(type) {
     if (type == 'return') {
-     
-      
     } else {}
   }
 
@@ -361,7 +357,6 @@ class _OrderItemDetailsState extends State<OrderItemDetails> {
     totalCost = 0;
     theme = Theme.of(context);
     return BlocBuilder<UserDatabaseBloc, Map>(builder: (context, state) {
-   
       return Container();
     });
   }
