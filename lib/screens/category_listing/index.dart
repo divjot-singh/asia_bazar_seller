@@ -163,9 +163,7 @@ class _CategoryListingState extends State<CategoryListing> {
                               item: item,
                               deleteHandler: () {
                                 items.removeAt(index);
-                                setState(() {
-                                  
-                                });
+                                setState(() {});
                               });
                         },
                       ),
@@ -173,6 +171,23 @@ class _CategoryListingState extends State<CategoryListing> {
                   ),
           ],
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: showScrollUp
+            ? FloatingActionButton(
+                onPressed: () {
+                  _scrollController.animateTo(0,
+                      duration: Duration(
+                        seconds: 1,
+                      ),
+                      curve: Curves.bounceOut);
+                },
+                child: Icon(
+                  Icons.keyboard_arrow_up,
+                  size: 24,
+                  color: ColorShades.greenBg,
+                ),
+              )
+            : null,
       );
     }
     return Container();
@@ -295,6 +310,23 @@ class _CategoryListingState extends State<CategoryListing> {
                   ),
           ],
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: showScrollUp
+            ? FloatingActionButton(
+                onPressed: () {
+                  _scrollController.animateTo(0,
+                      duration: Duration(
+                        seconds: 1,
+                      ),
+                      curve: Curves.bounceOut);
+                },
+                child: Icon(
+                  Icons.keyboard_arrow_up,
+                  size: 24,
+                  color: ColorShades.greenBg,
+                ),
+              )
+            : null,
       );
     }
     return Container();

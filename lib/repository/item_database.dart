@@ -60,7 +60,8 @@ class ItemDatabase {
       snapshot = await inventoryRef
           .document(categoryId)
           .collection('items')
-          .orderBy('opc')
+          .orderBy('quantity')
+          .where('quantity', isGreaterThanOrEqualTo: 1)
           .startAfterDocument(startAt)
           .limit(limit)
           .getDocuments();
@@ -82,7 +83,7 @@ class ItemDatabase {
       snapshot = await inventoryRef
           .document(categoryId)
           .collection('items')
-          .orderBy('opc')
+          .orderBy('quantity')
           .limit(limit)
           .getDocuments();
       returnValue = snapshot.documents;
@@ -90,7 +91,7 @@ class ItemDatabase {
       snapshot = await inventoryRef
           .document(categoryId)
           .collection('items')
-          .orderBy('opc')
+          .orderBy('quantity')
           .where('tokens', arrayContains: query)
           .limit(limit)
           .getDocuments();
