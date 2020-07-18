@@ -1,4 +1,3 @@
-
 import 'package:asia_bazar_seller/blocs/global_bloc/state.dart';
 import 'package:asia_bazar_seller/blocs/item_database_bloc/bloc.dart';
 import 'package:asia_bazar_seller/blocs/item_database_bloc/event.dart';
@@ -31,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController _controller = TextEditingController(text: '');
   String currentFilter = KeyNames['orderPlaced'];
   ScrollController _scrollController = ScrollController();
-  bool isFetching = false, showFullFilter = false;
+  bool isFetching = false, showFullFilter = false, showOverlay = false;
   DocumentSnapshot lastItem;
   Debouncer _debouncer = Debouncer();
   bool showScrollUp = false;
@@ -122,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
       statusColor = ColorShades.pacificBlue;
     }
     if (order['status'] == KeyNames['orderApproved']) {
-      statusColor = ColorShades.greenBg;
+      statusColor = ColorShades.greenColor;
     }
     if (order['status'] == KeyNames['orderDispatched'] ||
         order['status'] == KeyNames['orderReturnRequested']) {
@@ -130,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     if (order['status'] == KeyNames['orderDelivered'] ||
         order['status'] == KeyNames['orderReturnApproved']) {
-      statusColor = ColorShades.elfGreen;
+      statusColor = ColorShades.greenColor;
     }
     if (order['status'] == KeyNames['orderRejected'] ||
         order['status'] == KeyNames['orderCancelled'] ||
@@ -279,7 +278,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 backgroundColor: ColorShades.white,
                 drawer: AppDrawer(),
                 appBar: MyAppBar(
-                    hasTransparentBackground: true,
+                    backGroundColor: Colors.black.withOpacity(0.3),
+                    hasTransparentBackground: !showOverlay,
                     title: L10n().getStr('home.title'),
                     hideBackArrow: true,
                     leading: {
@@ -359,6 +359,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: ColorShades.greenBg,
                                 onRefresh: fetchCurrentFilterOrders,
                                 child: ListView.builder(
+                                  physics: AlwaysScrollableScrollPhysics(),
                                   controller: _scrollController,
                                   itemCount: listing.length,
                                   itemBuilder: (context, index) {
@@ -371,17 +372,23 @@ class _HomeScreenState extends State<HomeScreen> {
                             PageFetchingViewWithLightBg()
                           else
                             Expanded(
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  children: <Widget>[
-                                    Image.asset('assets/images/no_orders.png'),
-                                    Text(
-                                      L10n().getStr('home.drawer.noOrder',
-                                          {'type': currentFilter}),
-                                      style: theme.textTheme.h4
-                                          .copyWith(color: ColorShades.greenBg),
-                                    )
-                                  ],
+                              child: RefreshIndicator(
+                                color: ColorShades.greenBg,
+                                onRefresh: fetchCurrentFilterOrders,
+                                child: SingleChildScrollView(
+                                  physics: AlwaysScrollableScrollPhysics(),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Image.asset(
+                                          'assets/images/no_orders.png'),
+                                      Text(
+                                        L10n().getStr('home.drawer.noOrder',
+                                            {'type': currentFilter}),
+                                        style: theme.textTheme.h4.copyWith(
+                                            color: ColorShades.greenBg),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -399,6 +406,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
+                    showOverlay
+                        ? Container(
+                            height: MediaQuery.of(context).size.height,
+                            width: MediaQuery.of(context).size.width,
+                            color: Colors.black.withOpacity(0.3),
+                          )
+                        : Container(),
                   ],
                 ),
                 floatingActionButton: Builder(
@@ -407,7 +421,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     // Cannot be `Alignment.center`
                     alignment: Alignment.centerRight,
                     fabSize: 64.0,
-                    ringColor: Colors.transparent,
+                    ringColor: ColorShades.greenBg.withOpacity(0.7),
                     fabElevation: 8.0,
                     fabColor: ColorShades.greenBg,
                     fabOpenColor: ColorShades.white,
@@ -417,6 +431,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     animationCurve: Curves.easeInOutCirc,
                     onDisplayChange: (isOpen) {
+                      setState(() {
+                        showOverlay = isOpen;
+                      });
+
                       // _showSnackBar(
                       //     context, "The menu is ${isOpen ? "open" : "closed"}");
                     },
@@ -428,6 +446,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           if (currentFilter != item) {
                             setState(() {
                               currentFilter = item;
+                              showOverlay = false;
                             });
                             fetchCurrentFilterOrders();
                           }

@@ -10,7 +10,8 @@ class UninitialisedState extends OrderState {}
 
 class OrderFetchedState extends OrderState {
   dynamic orderDetails;
-  OrderFetchedState({@required this.orderDetails});
+  dynamic documentId;
+  OrderFetchedState({@required this.orderDetails, @required this.documentId});
 }
 
 class ItemFetchedState extends OrderState {

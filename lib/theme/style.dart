@@ -8,17 +8,25 @@ class ColorShades {
   static const Color navy = const Color(0xff001a79);
   static const Color marble = const Color(0xffffffff);
   static const Color smokeWhite = const Color(0xfff9f9f9);
+  static const Color veryLightGrey = const Color(0xffededed);
   static const Color grey100 = const Color(0xffd9dfee);
   static const Color grey200 = const Color(0xffb1bad4);
   static const Color grey300 = const Color(0xff647093);
   static const Color bastille = const Color(0xff2d2d33);
-  static const Color greenBg = const Color(0xff178A43);
+
+  // static const Color greenBg = const Color(0xffEF7F0C);
+
+  // static const Color darkGreenBg = const Color(0xffD07518);
+  // static const Color lightGreenBg = const Color(0xffFDCB9E);
+
+  static const Color greenBg = const Color(0xff178a43);
+
   static const Color darkGreenBg = const Color(0xff0F5C2C);
   static const Color lightGreenBg = const Color(0xffBDF5D2);
-  static const Color lightGreenBg50 = const Color(0xff52c234);
-  static const Color lightGreenBg75 = const Color(0xff0f9b0f);
-  static const Color darkGreenBg50 = const Color(0xff061700);
 
+  static const Color greenColor = const Color(0xff178a43);
+  static const Color darkGreenColor = const Color(0xff0F5C2C);
+  static const Color lightGreenColor = const Color(0xffBDF5D2);
   // Semantic
   static const Color elfGreen = const Color(0xff229d58);
   static const Color darkOrange = const Color(0xffff8a00);

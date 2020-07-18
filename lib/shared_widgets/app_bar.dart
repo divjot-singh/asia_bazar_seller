@@ -7,13 +7,14 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
   final bool hideBackArrow;
   final Map leading, rightAction;
   final hasTransparentBackground;
-  final textColor;
+  final textColor, backGroundColor;
 
   MyAppBar(
       {this.title,
       this.titleIcon,
       this.leading,
       this.rightAction,
+      this.backGroundColor,
       this.hideBackArrow,
       this.hasTransparentBackground = false,
       this.textColor})
@@ -38,19 +39,25 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
                             ? textColor
                             : hasTransparentBackground
                                 ? ColorShades.greenBg
-                                : ColorShades.white),
+                                : backGroundColor != null
+                                    ? ColorShades.greenBg
+                                    : ColorShades.white),
                   ),
             automaticallyImplyLeading: false,
             elevation: 0,
             centerTitle: true,
             backgroundColor: hasTransparentBackground == true
                 ? Colors.transparent
-                : ColorShades.greenBg,
+                : backGroundColor != null
+                    ? backGroundColor
+                    : ColorShades.greenBg,
             textTheme: Theme.of(context).textTheme,
             iconTheme: IconThemeData(
                 color: hasTransparentBackground
                     ? ColorShades.greenBg
-                    : ColorShades.white),
+                    : backGroundColor != null
+                        ? ColorShades.greenBg
+                        : ColorShades.white),
             actions: rightAction != null
                 ? <Widget>[
                     Padding(
@@ -80,7 +87,7 @@ class MyAppBar extends StatelessWidget with PreferredSizeWidget {
                           child: Icon(Icons.arrow_back,
                               color: textColor != null
                                   ? textColor
-                                  : ColorShades.green),
+                                  : ColorShades.greenBg),
                         ),
                       ),
           )),

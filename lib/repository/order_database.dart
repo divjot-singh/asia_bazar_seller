@@ -1,3 +1,4 @@
+import 'package:asia_bazar_seller/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -6,25 +7,17 @@ class OrderDatabaseRepo {
   static CollectionReference orderRef = _firestore.collection('orders');
   static CollectionReference orderedItems = _firestore.collection('orderItems');
   static CollectionReference inventoryRef = _firestore.collection('inventory');
-  Future<dynamic> fetchOrderDetails(
-      {@required String orderId,
-      @required String userId,
-      bool addListener = true}) async {
+  Future<dynamic> fetchOrderDetails({@required String orderId}) async {
     var returnValue;
     try {
       QuerySnapshot snapshot = await orderRef
           .where('orderId', isEqualTo: orderId)
-          .where('userId', isEqualTo: userId)
           .limit(1)
           .getDocuments();
       DocumentSnapshot order =
           snapshot.documents.length > 0 ? snapshot.documents[0] : {};
-      returnValue = order.data;
-      if (addListener) {
-        Stream<DocumentSnapshot> snapshotStream =
-            orderRef.document(order.documentID).snapshots();
-        returnValue = snapshotStream;
-      }
+      returnValue = order;
+
       return returnValue;
     } catch (e) {
       return null;
@@ -67,6 +60,20 @@ class OrderDatabaseRepo {
       return items;
     } catch (e) {
       return null;
+    }
+  }
+
+  Future<void> updateStatus(
+      {@required String orderId, @required String newStatus}) async {
+    try {
+      if (newStatus == KeyNames['orderDelivered'])
+        await orderRef.document(orderId).updateData(
+            {'status': newStatus, 'deliveryTimestamp': Timestamp.now()});
+      else
+        await orderRef.document(orderId).updateData({'status': newStatus});
+      return;
+    } catch (e) {
+      print(e);
     }
   }
 

@@ -57,10 +57,8 @@ class GtvDialog extends StatelessWidget {
   }
 }
 
-Future<Type> showCustomDialog(
-    {@required BuildContext context,
-    @required Widget child,
-    @required String heading}) {
+Future<dynamic> showCustomDialog(
+    {@required BuildContext context, @required Widget child, String heading}) {
   ThemeData theme = Theme.of(context);
   return showDialog(
     context: context,
@@ -78,7 +76,7 @@ Future<Type> showCustomDialog(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    heading,
+                    heading != null ? heading : '',
                     style: theme.textTheme.h4
                         .copyWith(color: theme.colorScheme.textPrimaryDark),
                   ),

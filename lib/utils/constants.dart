@@ -44,9 +44,11 @@ class Constants {
   static const POST_AUTHENTICATION_REDIRECTOR = 'user/redirect';
   static const USER_NOT_ADMIN = 'user/not_admin';
   static const EDIT_PROFILE = 'user/edit';
+  static const ORDER_DETAILS = 'user/order_details/:orderId';
+  static const HOME = 'user/home';
+  static const INVENTORY = 'user/inventory';
 
   static const ADMIN_PROFILE = 'user/is_admin';
-  static const HOME = 'user/home';
   static const ADD_ADDRESS = 'user/add_address';
   static const ONBOARDING = 'user/onboarding';
   static const ADDRESS_LIST = 'user/address_list';
@@ -54,7 +56,6 @@ class Constants {
   static const CART = 'user/cart';
   static const CATEGORY_LISTING = 'user/category/:categoryName/:categoryId';
   static const CHECKOUT = 'user/checkout';
-  static const ORDER_DETAILS = 'user/order_details/:orderId';
   static const SEARCH = 'user/search';
   static const ORDER_ITEM_DETAILS =
       'user/order_details/:orderId/item_details/:editView';

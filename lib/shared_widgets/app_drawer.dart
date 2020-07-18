@@ -21,7 +21,6 @@ class AppDrawer extends StatelessWidget {
           }
           String username = user != null ? user[KeyNames['userName']] : '';
           return Container(
-            color: ColorShades.lightGreenBg,
             child: Column(
               children: <Widget>[
                 DrawerHeader(
@@ -73,12 +72,25 @@ class AppDrawer extends StatelessWidget {
                 ),
                 ListTile(
                   onTap: () {
-                    Navigator.popAndPushNamed(context, Constants.HOME);
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, Constants.HOME, (route) => false);
                   },
                   leading: Icon(Icons.home, color: ColorShades.greenBg),
                   title: Text(
                       L10n().getStr(
                         'home.title',
+                      ),
+                      style: theme.textTheme.h4
+                          .copyWith(color: ColorShades.greenBg)),
+                ),
+                ListTile(
+                  onTap: () {
+                    Navigator.popAndPushNamed(context, Constants.INVENTORY);
+                  },
+                  leading: Icon(Icons.list, color: ColorShades.greenBg),
+                  title: Text(
+                      L10n().getStr(
+                        'drawer.inventory',
                       ),
                       style: theme.textTheme.h4
                           .copyWith(color: ColorShades.greenBg)),

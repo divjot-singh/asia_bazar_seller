@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ItemDatabaseBloc extends Bloc<ItemDatabaseEvents, Map> {
   @override
-  Map get initialState => UserDatabaseState.userstate;
+  Map get initialState => ItemDatabaseState.itemState;
   ItemDatabase itemDatabase = ItemDatabase();
   OrderDatabaseRepo orderRepo = OrderDatabaseRepo();
   @override
@@ -32,8 +32,23 @@ class ItemDatabaseBloc extends Bloc<ItemDatabaseEvents, Map> {
         state['allCategories'] = GlobalErrorState();
         yield {...state};
       }
-    }
-    if (event is FetchCategoryListing) {
+    } else if (event is FetchOutOfStockItems) {
+      state['outOfStockListing'] = GlobalFetchingState();
+      yield {...state};
+      try {
+        var listing = await itemDatabase.fetchOutofStockItems(
+            categoryId: event.categoryId);
+        if (listing != null) {
+          state['outOfStockListing'] = OutOfStockItemsFetched(
+              items: listing, categoryId: event.categoryId);
+        } else {
+          state['outOfStockListing'] = GlobalErrorState();
+        }
+      } catch (e) {
+        state['outOfStockListing'] = GlobalErrorState();
+      }
+      yield {...state};
+    } else if (event is FetchCategoryListing) {
       if (event.startAt == null) {
         state['categoryListing'] = GlobalFetchingState();
         yield {...state};
@@ -74,13 +89,7 @@ class ItemDatabaseBloc extends Bloc<ItemDatabaseEvents, Map> {
       }
     } else if (event is SearchCategoryItem) {
       if (event.startAt == null) {
-        var currentState = state['categoryListing'];
-        if (currentState is CategoryListingFetchedState)
-          state['categoryListing'] = PartialFetchingState(
-              categoryId: currentState.categoryId,
-              categoryItems: currentState.categoryItems);
-        else
-          state['categoryListing'] = GlobalFetchingState();
+        state['categoryListing'] = GlobalFetchingState();
         yield {...state};
       }
       try {
@@ -106,7 +115,9 @@ class ItemDatabaseBloc extends Bloc<ItemDatabaseEvents, Map> {
                 categoryId: event.categoryId, categoryItems: newList);
           } else {
             categoryListingState = CategoryListingFetchedState(
-                categoryId: event.categoryId, categoryItems: listing);
+                categoryId: event.categoryId,
+                categoryItems: listing,
+                showInputBox: true);
           }
           state['categoryListing'] = categoryListingState;
           yield {...state};
@@ -119,56 +130,9 @@ class ItemDatabaseBloc extends Bloc<ItemDatabaseEvents, Map> {
         state['categoryListing'] = GlobalErrorState();
         yield {...state};
       }
-    } else if (event is PlaceOrder) {
-      var details = event.orderDetails;
-      var userId = await StorageManager.getItem(KeyNames['userId']);
-
-      itemDatabase.placeOrder(
-          details: details, userId: userId, callback: event.callback);
-    } else if (event is SearchAllItems) {
-      if (event.startAt == null) {
-        var currentState = state['searchListing'];
-        if (currentState is CategoryListingFetchedState)
-          state['searchListing'] =
-              PartialFetchingState(categoryItems: currentState.categoryItems);
-        else
-          state['searchListing'] = GlobalFetchingState();
-        yield {...state};
-      }
-      try {
-        var listing = await itemDatabase.searchAllListing(
-            startAt: event.startAt, query: event.query);
-
-        if (listing != null) {
-          if (event.callback != null) {
-            event.callback(listing);
-          }
-          var searchListingState;
-          if (event.startAt != null &&
-              state['searchListing'] is SearchListingFetched) {
-            var newList = [];
-            var oldListing = state['searchListing'].searchItems;
-            newList.addAll(oldListing);
-            newList.addAll(listing);
-            searchListingState = SearchListingFetched(searchItems: newList);
-          } else {
-            searchListingState = SearchListingFetched(searchItems: listing);
-          }
-          state['searchListing'] = searchListingState;
-          yield {...state};
-        } else {
-          state['searchListing'] = GlobalErrorState();
-          yield {...state};
-        }
-      } catch (e) {
-        print(e);
-        state['categoryListing'] = GlobalErrorState();
-        yield {...state};
-      }
     } else if (event is FetchOrdersFiltered) {
       if (event.startAt == null &&
-          (event.searchQuery == null ||
-          event.searchQuery.length == 0)) {
+          (event.searchQuery == null || event.searchQuery.length == 0)) {
         state['ordersListState'] = GlobalFetchingState();
         yield {...state};
       } else if (event.searchQuery != null &&
@@ -205,6 +169,15 @@ class ItemDatabaseBloc extends Bloc<ItemDatabaseEvents, Map> {
         state['ordersListState'] = GlobalErrorState();
       }
       yield {...state};
+    } else if (event is RemoveItem) {
+      try {
+        var value = await itemDatabase.removeItem(
+            categoryId: event.categoryId, itemId: event.itemId);
+
+        if (event.callback != null) event.callback(value);
+      } catch (e) {
+        event.callback(false);
+      }
     }
   }
 }

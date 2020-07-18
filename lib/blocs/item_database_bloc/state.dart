@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 abstract class ItemDatabaseState {
   static Map itemState = {
     'categoryListing': ItemUninitialisedState(),
+    'outOfStockListing': ItemUninitialisedState(),
     'allCategories': ItemUninitialisedState(),
-    'searchListing': ItemUninitialisedState(),
     'itemDetails': ItemUninitialisedState(),
   };
 }
@@ -16,11 +16,18 @@ class AllCategoriesFetchedState {
   AllCategoriesFetchedState({@required this.categories});
 }
 
+class OutOfStockItemsFetched {
+  List items;
+  String categoryId;
+  OutOfStockItemsFetched({@required this.items, @required this.categoryId});
+}
+
 class CategoryListingFetchedState {
   List categoryItems;
   String categoryId;
+  bool showInputBox;
   CategoryListingFetchedState(
-      {@required this.categoryItems, @required this.categoryId});
+      {@required this.categoryItems, @required this.categoryId, this.showInputBox = false});
 }
 
 class SearchListingFetched {

@@ -1,6 +1,8 @@
 import 'package:asia_bazar_seller/screens/authentication_screen/authentication_screen.dart';
+import 'package:asia_bazar_seller/screens/category_listing/index.dart';
 
 import 'package:asia_bazar_seller/screens/home/index.dart';
+import 'package:asia_bazar_seller/screens/inventory/index.dart';
 import 'package:asia_bazar_seller/screens/order_details/index.dart';
 import 'package:asia_bazar_seller/screens/order_details/item_details.dart';
 import 'package:asia_bazar_seller/screens/redirector/index.dart';
@@ -41,6 +43,12 @@ class FluroRouter {
             return NotAdmin();
           },
         );
+      case Constants.INVENTORY:
+        return Handler(
+          handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+            return Inventory();
+          },
+        );
 
       case Constants.ORDER_DETAILS:
         return Handler(
@@ -64,7 +72,15 @@ class FluroRouter {
                 ));
           },
         );
-
+      case Constants.CATEGORY_LISTING:
+        return Handler(
+          handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+            return CategoryListing(
+              categoryId: params['categoryId'][0],
+              categoryName: params['categoryName'][0],
+            );
+          },
+        );
       case Constants.POST_AUTHENTICATION_REDIRECTOR:
         return Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
@@ -96,6 +112,17 @@ class FluroRouter {
       handler: getCommonHandler(Constants.HOME),
       transitionType: TransitionType.fadeIn,
     );
+    router.define(
+      Constants.CATEGORY_LISTING,
+      handler: getCommonHandler(Constants.CATEGORY_LISTING),
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      Constants.INVENTORY,
+      handler: getCommonHandler(Constants.INVENTORY),
+      transitionType: TransitionType.fadeIn,
+    );
+
     router.define(
       Constants.USER_NOT_ADMIN,
       handler: getCommonHandler(Constants.USER_NOT_ADMIN),

@@ -10,7 +10,7 @@ class FabCircularMenu extends StatefulWidget {
   final Alignment alignment;
   final Color ringColor;
   final double ringDiameter;
-  final double ringWidth;
+  final double ringWidth, startAngle, range;
   final double fabSize;
   final double fabElevation;
   final Color fabColor;
@@ -32,6 +32,8 @@ class FabCircularMenu extends StatefulWidget {
       this.fabSize = 64.0,
       this.fabElevation = 8.0,
       this.fabColor,
+      this.range = 180,
+      this.startAngle = -90,
       this.fabOpenColor,
       this.fabCloseColor,
       this.fabOpenIcon = const Icon(Icons.menu),
@@ -201,11 +203,11 @@ class FabCircularMenuState extends State<FabCircularMenu>
     if (widget.alignment.x == 0) {
       angleFix = 0.0 * _directionY.abs();
     } else if (widget.alignment.y == 0) {
-      angleFix = -90 * _directionX.abs();
+      angleFix = widget.startAngle * _directionX.abs();
     }
 
-    final angle =
-        vector.radians(180 / (widget.children.length - 1) * index + angleFix);
+    final angle = vector.radians(
+        widget.range / (widget.children.length - 1) * index + angleFix);
 
     return Transform(
         transform: Matrix4.translationValues(

@@ -12,6 +12,36 @@ class ItemDatabase {
     return snapshot.documents;
   }
 
+  Future<List> fetchOutofStockItems({@required String categoryId}) async {
+    QuerySnapshot snapshot;
+    try {
+      snapshot = await inventoryRef
+          .document(categoryId)
+          .collection('items')
+          .where('quantity', isEqualTo: 0)
+          .getDocuments();
+      return snapshot.documents;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<dynamic> removeItem(
+      {@required String categoryId, @required String itemId}) async {
+    try {
+      await inventoryRef
+          .document(categoryId)
+          .collection('items')
+          .document(itemId)
+          .delete();
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
   Future<List> fetchCategoryListing(
       {@required String categoryId, @required DocumentSnapshot startAt}) async {
     var limit = 50;
@@ -21,7 +51,8 @@ class ItemDatabase {
       snapshot = await inventoryRef
           .document(categoryId)
           .collection('items')
-          .orderBy('opc')
+          .orderBy('quantity')
+          .where('quantity', isGreaterThanOrEqualTo: 1)
           .limit(limit)
           .getDocuments();
       returnValue = snapshot.documents;

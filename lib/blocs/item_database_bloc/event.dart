@@ -13,11 +13,10 @@ class FetchCategoryListing extends ItemDatabaseEvents {
       {@required this.categoryId, this.startAt, this.callback});
 }
 
-class SearchAllItems extends ItemDatabaseEvents {
-  String query;
-  DocumentSnapshot startAt;
+class FetchOutOfStockItems extends ItemDatabaseEvents {
+  String categoryId;
   Function callback;
-  SearchAllItems({@required this.query, this.startAt, this.callback});
+  FetchOutOfStockItems({@required this.categoryId, this.callback});
 }
 
 class SearchCategoryItem extends ItemDatabaseEvents {
@@ -36,10 +35,10 @@ class GetItemDetails extends ItemDatabaseEvents {
   GetItemDetails({@required this.itemId, this.categoryId});
 }
 
-class PlaceOrder extends ItemDatabaseEvents {
-  Map orderDetails;
+class RemoveItem extends ItemDatabaseEvents {
+  String categoryId, itemId;
   Function callback;
-  PlaceOrder({@required this.orderDetails, this.callback});
+  RemoveItem({@required this.categoryId, @required this.itemId, this.callback});
 }
 
 class FetchOrdersFiltered extends ItemDatabaseEvents {
