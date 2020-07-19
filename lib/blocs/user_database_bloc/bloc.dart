@@ -59,6 +59,19 @@ class UserDatabaseBloc extends Bloc<UserDatabaseEvents, Map> {
           yield {...state};
         }
       }
+    } else if (event is AddNewAdmin) {
+      try {
+        Map userData = {};
+        userData[KeyNames['userName']] = event.username;
+        userData[KeyNames['phone']] = event.phoneNumber;
+        userData[KeyNames['superAdmin']] = event.isSuperAdmin;
+
+        var value = await userDatabaseRepo.addNewAdmin(userData: userData);
+        if (event.callback != null) event.callback(value);
+      } catch (e) {
+        print(e);
+        if (event.callback != null) event.callback(false);
+      }
     }
   }
 }

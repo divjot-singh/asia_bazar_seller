@@ -95,6 +95,19 @@ class AppDrawer extends StatelessWidget {
                       style: theme.textTheme.h4
                           .copyWith(color: ColorShades.greenBg)),
                 ),
+                if (user['isSuperAdmin'])
+                  ListTile(
+                    onTap: () {
+                      Navigator.popAndPushNamed(context, Constants.ADD_ADMIN);
+                    },
+                    leading: Icon(Icons.person_add, color: ColorShades.greenBg),
+                    title: Text(
+                        L10n().getStr(
+                          'drawer.addUser',
+                        ),
+                        style: theme.textTheme.h4
+                            .copyWith(color: ColorShades.greenBg)),
+                  ),
                 Divider(
                   color: ColorShades.greenBg,
                   thickness: 1,

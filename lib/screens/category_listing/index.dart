@@ -62,6 +62,7 @@ class _CategoryListingState extends State<CategoryListing> {
   void dispose() {
     _scrollController.removeListener(scrollListener);
     _scrollController.dispose();
+    _textController.dispose();
     _debouncer = null;
     super.dispose();
   }

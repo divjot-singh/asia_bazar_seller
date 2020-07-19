@@ -13,7 +13,7 @@ import 'package:asia_bazar_seller/theme/style.dart';
 class InputBox extends StatelessWidget {
   String hintText, value, label;
   final Function validator, onChanged, onFieldSubmitted, onTap;
-  final bool disabled, autovalidate;
+  final bool disabled, autovalidate, hideErrorText;
   final TextInputType keyboardType;
   final FocusNode focusNode;
   final int maxLength;
@@ -25,6 +25,7 @@ class InputBox extends StatelessWidget {
   TextEditingController controller;
   InputBox(
       {this.label,
+      this.hideErrorText = false,
       this.labelColor,
       this.hintText,
       this.margin,
@@ -95,8 +96,9 @@ class InputBox extends StatelessWidget {
                 suffixIcon: suffixIcon,
                 counterText: '',
                 contentPadding: EdgeInsets.all(Spacing.space12),
-                errorStyle: theme.textTheme.body2Regular
-                    .copyWith(color: theme.colorScheme.error),
+                errorStyle: theme.textTheme.body2Regular.copyWith(
+                    color: theme.colorScheme.error,
+                    fontSize: hideErrorText ? 0 : 12),
                 hintText: hintText ?? L10n().getStr('input.placeholder'),
                 hintStyle: theme.textTheme.body1Regular
                     .copyWith(color: theme.colorScheme.textSecGray2),

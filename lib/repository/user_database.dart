@@ -54,4 +54,13 @@ class UserDatabase {
       return snapshot.documents[0].data;
     }
   }
+
+  Future<bool> addNewAdmin({@required Map userData}) async {
+    try {
+      await adminRef.collection('entries').add({...userData});
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

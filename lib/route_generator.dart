@@ -1,3 +1,4 @@
+import 'package:asia_bazar_seller/screens/add_admin/index.dart';
 import 'package:asia_bazar_seller/screens/authentication_screen/authentication_screen.dart';
 import 'package:asia_bazar_seller/screens/category_listing/index.dart';
 
@@ -47,6 +48,12 @@ class FluroRouter {
         return Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
             return Inventory();
+          },
+        );
+      case Constants.ADD_ADMIN:
+        return Handler(
+          handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+            return AddAdmin();
           },
         );
 
@@ -144,6 +151,11 @@ class FluroRouter {
     router.define(
       Constants.ORDER_ITEM_DETAILS,
       handler: getCommonHandler(Constants.ORDER_ITEM_DETAILS),
+      transitionType: TransitionType.cupertinoFullScreenDialog,
+    );
+    router.define(
+      Constants.ADD_ADMIN,
+      handler: getCommonHandler(Constants.ADD_ADMIN),
       transitionType: TransitionType.cupertinoFullScreenDialog,
     );
 
