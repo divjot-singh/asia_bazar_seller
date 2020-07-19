@@ -49,6 +49,7 @@ class Constants {
   static const HOME = 'user/home';
   static const INVENTORY = 'user/inventory';
   static const ADD_ADMIN='user/admin/add';
+  static const MANAGE_ADMINS = 'user/admin/manage';
 
   static const ADMIN_PROFILE = 'user/is_admin';
   static const ADD_ADDRESS = 'user/add_address';

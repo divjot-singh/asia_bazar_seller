@@ -4,6 +4,7 @@ import 'package:asia_bazar_seller/screens/category_listing/index.dart';
 
 import 'package:asia_bazar_seller/screens/home/index.dart';
 import 'package:asia_bazar_seller/screens/inventory/index.dart';
+import 'package:asia_bazar_seller/screens/manage_admins/index.dart';
 import 'package:asia_bazar_seller/screens/order_details/index.dart';
 import 'package:asia_bazar_seller/screens/order_details/item_details.dart';
 import 'package:asia_bazar_seller/screens/redirector/index.dart';
@@ -54,6 +55,13 @@ class FluroRouter {
         return Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
             return AddAdmin();
+          },
+        );
+
+        case Constants.MANAGE_ADMINS:
+        return Handler(
+          handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+            return ManageAdmins();
           },
         );
 
@@ -147,7 +155,12 @@ class FluroRouter {
       handler: getCommonHandler(Constants.ORDER_DETAILS),
       transitionType: TransitionType.inFromBottom,
     );
-
+    router.define(
+      Constants.MANAGE_ADMINS,
+      handler: getCommonHandler(Constants.MANAGE_ADMINS),
+      transitionType: TransitionType.inFromBottom,
+    );
+    
     router.define(
       Constants.ORDER_ITEM_DETAILS,
       handler: getCommonHandler(Constants.ORDER_ITEM_DETAILS),

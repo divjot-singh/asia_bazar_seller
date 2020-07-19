@@ -55,11 +55,57 @@ class UserDatabase {
     }
   }
 
-  Future<bool> addNewAdmin({@required Map userData}) async {
+  Future<dynamic> addNewAdmin({@required Map userData}) async {
     try {
-      await adminRef.collection('entries').add({...userData});
+      QuerySnapshot snapshot = await adminRef
+          .collection('entries')
+          .where(KeyNames['phone'], isEqualTo: userData[KeyNames['phone']])
+          .getDocuments();
+      if (snapshot.documents.length == 0)
+        await adminRef.collection('entries').add({...userData});
+      else
+        return 'ADMIN_ALREADY_ADDED';
       return true;
     } catch (e) {
+      return false;
+    }
+  }
+
+  Future<List> fetchAllAdmins() async {
+    try {
+      QuerySnapshot snapshot =
+          await adminRef.collection('entries').getDocuments();
+      return snapshot.documents;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<bool> updatePrivilege(
+      {@required String documentId, @required isSuperAdmin}) async {
+    try {
+      await adminRef
+          .collection('entries')
+          .document(documentId)
+          .updateData({KeyNames['superAdmin']: isSuperAdmin});
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  Future<bool> deleteAdmin(
+      {@required String documentId}) async {
+    try {
+      await adminRef
+          .collection('entries')
+          .document(documentId)
+          .delete();
+      return true;
+    } catch (e) {
+      print(e);
       return false;
     }
   }

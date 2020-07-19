@@ -2,6 +2,7 @@ import 'package:asia_bazar_seller/blocs/user_database_bloc/bloc.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/events.dart';
 import 'package:asia_bazar_seller/l10n/l10n.dart';
 import 'package:asia_bazar_seller/shared_widgets/app_bar.dart';
+import 'package:asia_bazar_seller/shared_widgets/customLoader.dart';
 import 'package:asia_bazar_seller/shared_widgets/input_box.dart';
 import 'package:asia_bazar_seller/shared_widgets/primary_button.dart';
 import 'package:asia_bazar_seller/shared_widgets/snackbar.dart';
@@ -209,6 +210,7 @@ class _AddAdminState extends State<AddAdmin> {
                   setState(() {
                     disableButton = true;
                   });
+                  showCustomLoader(context);
                   BlocProvider.of<UserDatabaseBloc>(context).add(AddNewAdmin(
                       username: userName,
                       phoneNumber: phone,
@@ -217,7 +219,8 @@ class _AddAdminState extends State<AddAdmin> {
                         setState(() {
                           disableButton = false;
                         });
-                        if (result) {
+                        Navigator.pop(context);
+                        if (result == true) {
                           showCustomSnackbar(
                             type: SnackbarType.success,
                             context: context,
@@ -227,10 +230,12 @@ class _AddAdminState extends State<AddAdmin> {
                           _controller.text = '';
                           selectedUserMode = 'admin';
                         } else {
+                          var error = 'profile.address.error';
+                          if (result is String) error = "error." + result;
                           showCustomSnackbar(
                             type: SnackbarType.error,
                             context: context,
-                            content: L10n().getStr('profile.address.error'),
+                            content: L10n().getStr(error),
                           );
                         }
                       }));

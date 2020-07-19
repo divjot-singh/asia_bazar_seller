@@ -46,6 +46,7 @@ Map<String, Map<String, String>> strings = {
     "error.invalidCredential": "Invalid phone number",
     "error.verifyPhoneNumberError": "Some error in authentication",
     "error.verificationFailed": "Verification Failed",
+    "error.ADMIN_ALREADY_ADDED":"This number is already registered as an admin on Asia Bazar",
     "error.ITEM_OUT_OF_STOCK": "Selected quantity is not available in stock",
     "authentication.enterNumber":
         "Please enter your phone number. We will send you a one time password",
@@ -59,6 +60,10 @@ Map<String, Map<String, String>> strings = {
     "addUser.note.super_admin":"The super admin will have admin privileges plus add and manage other admins/super admins and manage inventory",
     "addUser.add":"Add",
     "addUser.success":"Admin successfully added",
+    "manageUser.heading":"Manage admins",
+    "manageUser.makeAdmin":"Demote to admin",
+    "manageUser.makeSuperAdmin":"Promote to super admin",
+    "manageUser.delete":"Delete",
     "phoneAuthentication.resend": "Resend",
     "phoneAuthentication.verify": "Verify",
     "phoneAuthentication.verificationFailed": "Verification Failed",

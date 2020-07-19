@@ -72,6 +72,59 @@ class UserDatabaseBloc extends Bloc<UserDatabaseEvents, Map> {
         print(e);
         if (event.callback != null) event.callback(false);
       }
+    } else if (event is FetchAllAdmins) {
+      try {
+        state['allAdmins'] = GlobalFetchingState();
+        yield {...state};
+        var admins = await userDatabaseRepo.fetchAllAdmins();
+        if (admins is List) {
+          state['allAdmins'] = AllAdminsFetchedState(admins: admins);
+        } else {
+          state['allAdmins'] = GlobalErrorState();
+        }
+      } catch (e) {
+        print(e);
+        state['allAdmins'] = GlobalErrorState();
+      }
+      yield {...state};
+    } else if (event is UpdatePrivilege) {
+      try {
+        var result = await userDatabaseRepo.updatePrivilege(
+            isSuperAdmin: event.isSuperAdmin, documentId: event.documentId);
+        if (result) {
+          var admins = await userDatabaseRepo.fetchAllAdmins();
+          if (admins is List) {
+            state['allAdmins'] = AllAdminsFetchedState(admins: admins);
+          } else {
+            state['allAdmins'] = GlobalErrorState();
+          }
+        }
+        if (event.callback != null) event.callback(result);
+      } catch (e) {
+        print(e);
+        state['allAdmins'] = GlobalErrorState();
+        if (event.callback != null) event.callback(false);
+      }
+      yield {...state};
+    } else if (event is DeleteAdmin) {
+      try {
+        var result =
+            await userDatabaseRepo.deleteAdmin(documentId: event.documentId);
+        if (result) {
+          var admins = await userDatabaseRepo.fetchAllAdmins();
+          if (admins is List) {
+            state['allAdmins'] = AllAdminsFetchedState(admins: admins);
+          } else {
+            state['allAdmins'] = GlobalErrorState();
+          }
+        }
+        if (event.callback != null) event.callback(result);
+      } catch (e) {
+        print(e);
+        state['allAdmins'] = GlobalErrorState();
+        if (event.callback != null) event.callback(false);
+      }
+      yield {...state};
     }
   }
 }
