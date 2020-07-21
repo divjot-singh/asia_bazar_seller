@@ -7,6 +7,7 @@ import 'package:asia_bazar_seller/l10n/l10n.dart';
 import 'package:asia_bazar_seller/shared_widgets/app_bar.dart';
 import 'package:asia_bazar_seller/shared_widgets/app_drawer.dart';
 import 'package:asia_bazar_seller/shared_widgets/circular_list.dart';
+import 'package:asia_bazar_seller/shared_widgets/firebase_notification_configuration.dart';
 import 'package:asia_bazar_seller/shared_widgets/input_box.dart';
 import 'package:asia_bazar_seller/shared_widgets/page_views.dart';
 import 'package:asia_bazar_seller/theme/style.dart';
@@ -47,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    ConfigureNotification.configureNotifications();
     _controller.text = '';
     fetchCountryCode();
     fetchCurrentFilterOrders();
