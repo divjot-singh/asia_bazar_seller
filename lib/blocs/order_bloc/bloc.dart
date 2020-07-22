@@ -48,7 +48,7 @@ class OrderDetailsBloc extends Bloc<OrderEvent, Map> {
     } else if (event is UpdateOrderStatus) {
       try {
         await orderRepo.updateStatus(
-            orderId: event.orderId, newStatus: event.newStatus);
+            orderId: event.orderId, newStatus: event.newStatus, itemList:event.itemList);
         if (event.callback != null) event.callback(true);
       } catch (e) {
         if (event.callback != null) event.callback(false);

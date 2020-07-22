@@ -48,11 +48,11 @@ class _OrderDetailsState extends State<OrderDetails> {
     super.initState();
   }
 
-  void acceptOrRejectOrder(DismissDirection direction) {
+  void acceptOrRejectOrder(DismissDirection direction, {List itemList}) {
     if (direction == DismissDirection.startToEnd) {
       updateStatus(KeyNames['orderApproved']);
     } else {
-      updateStatus(KeyNames['orderRejected']);
+      updateStatus(KeyNames['orderRejected'], itemList: itemList);
     }
   }
 
@@ -105,12 +105,13 @@ class _OrderDetailsState extends State<OrderDetails> {
     return false;
   }
 
-  updateStatus(status) {
+  updateStatus(status, {List itemList}) {
     if (documentId != null) {
       showCustomLoader(context);
       BlocProvider.of<OrderDetailsBloc>(context).add(UpdateOrderStatus(
           newStatus: status,
           orderId: documentId,
+          itemList: itemList,
           callback: (value) {
             Navigator.pop(context);
             if (value) {
@@ -126,10 +127,11 @@ class _OrderDetailsState extends State<OrderDetails> {
     }
   }
 
-  Widget fetchBottomCta(status) {
+  Widget fetchBottomCta(status, {List itemList}) {
     if (status == KeyNames['orderPlaced']) {
       return CenterSliderButton(
-        onDismiss: acceptOrRejectOrder,
+        onDismiss: (direction) =>
+            acceptOrRejectOrder(direction, itemList: itemList),
         confirmDismiss: showRejectDialog,
         leftShimmerHighlightColor: Colors.red[200],
         rightShimmerHighlightColor: Colors.green[200],
@@ -858,15 +860,33 @@ class _OrderDetailsState extends State<OrderDetails> {
                         itemDetails(orderDetails),
                       ]),
                     ),
-                    bottomNavigationBar: BottomAppBar(
-                      child: Container(
-                        height: 72,
-                        padding: EdgeInsets.symmetric(
-                            horizontal: Spacing.space16,
-                            vertical: Spacing.space12),
-                        child: fetchBottomCta(orderDetails['status']),
-                      ),
-                    ),
+                    bottomNavigationBar: BlocBuilder<OrderDetailsBloc, Map>(
+                        builder: (context, state) {
+                      var currentState = state['itemState'];
+                      if (currentState is ItemFetchedState &&
+                          currentState.orderId == widget.orderId) {
+                        var orderedItems = currentState.orderItems.map((item) {
+                          var itemDetails =
+                              item['orderData'].data['itemDetails'];
+                          return {
+                            'categoryId': itemDetails['categoryId'],
+                            'quantity': itemDetails['cartQuantity'],
+                            'itemId': itemDetails['opc'].toString()
+                          };
+                        }).toList();
+                        return BottomAppBar(
+                          child: Container(
+                            height: 72,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Spacing.space16,
+                                vertical: Spacing.space12),
+                            child: fetchBottomCta(orderDetails['status'],
+                                itemList: orderedItems),
+                          ),
+                        );
+                      }
+                      return SizedBox.shrink();
+                    }),
                   ),
                 );
               }

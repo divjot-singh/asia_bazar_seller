@@ -64,14 +64,37 @@ class OrderDatabaseRepo {
   }
 
   Future<void> updateStatus(
-      {@required String orderId, @required String newStatus}) async {
+      {@required String orderId,
+      @required String newStatus,
+      List itemList}) async {
     try {
       if (newStatus == KeyNames['orderDelivered'])
         await orderRef.document(orderId).updateData(
             {'status': newStatus, 'deliveryTimestamp': Timestamp.now()});
       else
         await orderRef.document(orderId).updateData({'status': newStatus});
+      if (newStatus == KeyNames['orderRejected']) {
+        restoreItemsInInventory(itemList);
+      }
       return;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> restoreItemsInInventory(List itemList) async {
+    try {
+      itemList.forEach((item) async {
+        await inventoryRef
+            .document(item['categoryId'])
+            .collection('items')
+            .document(item['itemId'])
+            .updateData({
+          'quantity': FieldValue.increment(item['quantity'] is String
+              ? int.parse(item['quantity'])
+              : item['quantity'])
+        });
+      });
     } catch (e) {
       print(e);
     }
