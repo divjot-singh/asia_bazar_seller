@@ -1,11 +1,8 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:asia_bazar_seller/models/user.dart';
 import 'package:asia_bazar_seller/services/log_printer.dart';
 import 'package:asia_bazar_seller/utils/constants.dart';
-import 'package:asia_bazar_seller/utils/local_notifications.dart';
-import 'package:asia_bazar_seller/utils/navigator_service.dart';
 import 'package:asia_bazar_seller/utils/storage_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

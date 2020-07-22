@@ -2,7 +2,6 @@ import 'package:asia_bazar_seller/blocs/global_bloc/state.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/bloc.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/events.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/state.dart';
-import 'package:asia_bazar_seller/shared_widgets/firebase_notification_configuration.dart';
 import 'package:asia_bazar_seller/shared_widgets/page_views.dart';
 import 'package:asia_bazar_seller/theme/style.dart';
 import 'package:asia_bazar_seller/utils/constants.dart';

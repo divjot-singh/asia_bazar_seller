@@ -99,11 +99,11 @@ class LocalNotificationIos extends LocalNotification {
   }
 
   String getIcon() {
-    return notificationMessage['data']["icon"];
+    return notificationMessage["icon"];
   }
 
   String getRedirectPath() {
-    var data = notificationMessage['data']["extra_data"];
+    var data = notificationMessage["extra_data"];
     Map extraData = {...json.decode(data)};
     return NotificationTypes.fetchNotificationRoute(extraData);
   }

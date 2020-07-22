@@ -85,3 +85,9 @@ post_install do |installer|
     end
   end
 end
+
+pod 'Firebase/Auth'
+pod 'Firebase/Firestore'
+pod 'Firebase/Messaging'
+pod 'Firebase/Crashlytics'
+pod 'Firebase/Analytics'

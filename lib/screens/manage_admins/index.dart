@@ -4,7 +4,6 @@ import 'package:asia_bazar_seller/blocs/user_database_bloc/events.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/state.dart';
 import 'package:asia_bazar_seller/l10n/l10n.dart';
 import 'package:asia_bazar_seller/shared_widgets/app_bar.dart';
-import 'package:asia_bazar_seller/shared_widgets/base_card.dart';
 import 'package:asia_bazar_seller/shared_widgets/customLoader.dart';
 import 'package:asia_bazar_seller/shared_widgets/page_views.dart';
 import 'package:asia_bazar_seller/shared_widgets/snackbar.dart';
@@ -12,7 +11,6 @@ import 'package:asia_bazar_seller/theme/style.dart';
 import 'package:asia_bazar_seller/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ManageAdmins extends StatefulWidget {

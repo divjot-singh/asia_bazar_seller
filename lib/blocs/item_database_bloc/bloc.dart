@@ -1,11 +1,8 @@
 import 'package:asia_bazar_seller/blocs/global_bloc/state.dart';
 import 'package:asia_bazar_seller/blocs/item_database_bloc/event.dart';
 import 'package:asia_bazar_seller/blocs/item_database_bloc/state.dart';
-import 'package:asia_bazar_seller/blocs/user_database_bloc/state.dart';
 import 'package:asia_bazar_seller/repository/item_database.dart';
 import 'package:asia_bazar_seller/repository/order_database.dart';
-import 'package:asia_bazar_seller/utils/constants.dart';
-import 'package:asia_bazar_seller/utils/storage_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ItemDatabaseBloc extends Bloc<ItemDatabaseEvents, Map> {
