@@ -15,8 +15,8 @@ NotificationDetails getNotificationDetails(
     importance: Importance.Max,
     priority: Priority.Max,
     playSound: true,
-    icon: '@mipmap/ic_launcher',
-    color: ColorShades.greenBg,
+    icon: '@mipmap/launcher',
+    color: ColorShades.red,
     styleInformation: BigTextStyleInformation(
       body,
       htmlFormatBigText: true,
