@@ -26,7 +26,6 @@ import Firebase
 	application.registerUserNotificationSettings(settings)
 	}
 
-	application.registerForRemoteNotifications()
 	
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
