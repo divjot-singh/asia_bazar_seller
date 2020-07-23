@@ -163,6 +163,7 @@ dynamic getLocalNotification({
 class NotificationTypes {
   static Map routeMap = {
     'ORDER_PLACED_NOTIFICATION': Constants.ORDER_DETAILS,
+    'OUT_OF_STOCK_NOTIFICATION': Constants.CATEGORY_LISTING
   };
   static String fetchNotificationRoute(Map notificationData) {
     Map data = {...notificationData};
