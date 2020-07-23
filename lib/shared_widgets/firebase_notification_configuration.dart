@@ -104,8 +104,7 @@ class ConfigureNotification {
     notificationId += 1;
     var redirectPath = localNotification.getRedirectPath();
     //var arguments = await localNotification.getArguments();
-    locator<NavigationService>()
-        .navigateTo(redirectPath);
+    locator<NavigationService>().navigateTo(redirectPath);
   }
 
   static dynamic getLocalNotification({
