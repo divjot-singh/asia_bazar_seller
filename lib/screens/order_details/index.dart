@@ -1,3 +1,5 @@
+import 'package:asia_bazar_seller/blocs/global_bloc/bloc.dart';
+import 'package:asia_bazar_seller/blocs/global_bloc/events.dart';
 import 'package:asia_bazar_seller/blocs/global_bloc/state.dart';
 import 'package:asia_bazar_seller/blocs/order_bloc/bloc.dart';
 import 'package:asia_bazar_seller/blocs/order_bloc/event.dart';
@@ -39,13 +41,24 @@ class _OrderDetailsState extends State<OrderDetails> {
     KeyNames['orderDelivered'],
     KeyNames['orderRejected'],
   ];
+  double pointsValue;
   @override
   void initState() {
     BlocProvider.of<OrderDetailsBloc>(context)
         .add(FetchOrderDetails(orderId: widget.orderId));
     BlocProvider.of<OrderDetailsBloc>(context)
         .add(FetchOrderItems(orderId: widget.orderId));
+    BlocProvider.of<GlobalBloc>(context)
+        .add(FetchSellerInfo(callback: fetchInfoCallback));
     super.initState();
+  }
+
+  void fetchInfoCallback(info) {
+    if (info['loyalty_point_value'] != null) {
+      setState(() {
+        pointsValue = info['loyalty_point_value'];
+      });
+    }
   }
 
   void acceptOrRejectOrder(DismissDirection direction, {List itemList}) {
@@ -105,13 +118,14 @@ class _OrderDetailsState extends State<OrderDetails> {
     return false;
   }
 
-  updateStatus(status, {List itemList}) {
+  updateStatus(status, {List itemList, Map pointsDetails}) {
     if (documentId != null) {
       showCustomLoader(context);
       BlocProvider.of<OrderDetailsBloc>(context).add(UpdateOrderStatus(
           newStatus: status,
           orderId: documentId,
           itemList: itemList,
+          pointsDetails: pointsDetails,
           callback: (value) {
             Navigator.pop(context);
             if (value) {
@@ -127,7 +141,7 @@ class _OrderDetailsState extends State<OrderDetails> {
     }
   }
 
-  Widget fetchBottomCta(status, {List itemList}) {
+  Widget fetchBottomCta(status, {List itemList, Map pointsDetails}) {
     if (status == KeyNames['orderPlaced']) {
       return CenterSliderButton(
         onDismiss: (direction) =>
@@ -171,7 +185,8 @@ class _OrderDetailsState extends State<OrderDetails> {
       int statusIndex = statusChronology.indexOf(status);
       return SliderButton(
         action: () {
-          updateStatus(statusChronology[statusIndex + 1]);
+          updateStatus(statusChronology[statusIndex + 1],
+              pointsDetails: pointsDetails);
         },
         backgroundColor: ColorShades.greenBg,
         buttonBoxShadow: BoxShadow(
@@ -842,6 +857,14 @@ class _OrderDetailsState extends State<OrderDetails> {
               } else {
                 var orderDetails = state.orderDetails;
                 documentId = state.documentId;
+                var pointsDetails;
+                if (pointsValue != null) {
+                  pointsDetails = {
+                    'userId': orderDetails['userId'],
+                    'points': pointsValue * orderDetails['amount']
+                  };
+                }
+
                 return RefreshIndicator(
                   backgroundColor: ColorShades.greenBg,
                   onRefresh: refreshPage,
@@ -874,6 +897,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                             'itemId': itemDetails['opc'].toString()
                           };
                         }).toList();
+
                         return BottomAppBar(
                           child: Container(
                             height: 72,
@@ -881,7 +905,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 horizontal: Spacing.space16,
                                 vertical: Spacing.space12),
                             child: fetchBottomCta(orderDetails['status'],
-                                itemList: orderedItems),
+                                itemList: orderedItems,
+                                pointsDetails: pointsDetails),
                           ),
                         );
                       }

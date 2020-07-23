@@ -1,3 +1,4 @@
+import 'package:asia_bazar_seller/repository/user_database.dart';
 import 'package:asia_bazar_seller/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ class OrderDatabaseRepo {
   static CollectionReference orderRef = _firestore.collection('orders');
   static CollectionReference orderedItems = _firestore.collection('orderItems');
   static CollectionReference inventoryRef = _firestore.collection('inventory');
+  static UserDatabase userDatabase = UserDatabase();
   Future<dynamic> fetchOrderDetails({@required String orderId}) async {
     var returnValue;
     try {
@@ -66,12 +68,15 @@ class OrderDatabaseRepo {
   Future<void> updateStatus(
       {@required String orderId,
       @required String newStatus,
-      List itemList}) async {
+      List itemList,
+      Map pointsDetails}) async {
     try {
-      if (newStatus == KeyNames['orderDelivered'])
+      if (newStatus == KeyNames['orderDelivered']) {
         await orderRef.document(orderId).updateData(
             {'status': newStatus, 'deliveryTimestamp': Timestamp.now()});
-      else
+        if (pointsDetails != null)
+          await userDatabase.updatePoints(pointsDetails);
+      } else
         await orderRef.document(orderId).updateData({'status': newStatus});
       if (newStatus == KeyNames['orderRejected']) {
         restoreItemsInInventory(itemList);

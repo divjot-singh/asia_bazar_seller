@@ -5,7 +5,8 @@ const Map KeyNames = {
   "userId": 'user_id',
   "token": 'token_info',
   "phone": "phone_number",
-  "superAdmin":"isSuperAdmin",
+  'points': "loyalty_points",
+  "superAdmin": "isSuperAdmin",
   "address": "address",
   'fcmToken': "fcmToken",
   "cart": "cart",
@@ -48,7 +49,7 @@ class Constants {
   static const ORDER_DETAILS = 'user/order_details/:orderId';
   static const HOME = 'user/home';
   static const INVENTORY = 'user/inventory';
-  static const ADD_ADMIN='user/admin/add';
+  static const ADD_ADMIN = 'user/admin/add';
   static const MANAGE_ADMINS = 'user/admin/manage';
 
   static const ADMIN_PROFILE = 'user/is_admin';

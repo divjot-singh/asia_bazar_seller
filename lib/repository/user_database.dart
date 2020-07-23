@@ -9,6 +9,8 @@ enum UserType { Admin, User, New }
 class UserDatabase {
   static Firestore _firestore = Firestore.instance;
   static CollectionReference userDatabase = _firestore.collection('users');
+  static DocumentReference usersRef =
+      _firestore.collection('users').document('user');
   static DocumentReference adminRef =
       _firestore.collection('users').document('admin');
   static CollectionReference inventoryRef = _firestore.collection('inventory');
@@ -96,13 +98,18 @@ class UserDatabase {
     }
   }
 
-  Future<bool> deleteAdmin(
-      {@required String documentId}) async {
+  Future<void> updatePoints(Map pointsDetails) async {
+    await usersRef
+        .collection('entries')
+        .document(pointsDetails['userId'])
+        .updateData({
+      KeyNames['points']: FieldValue.increment(pointsDetails['points'])
+    });
+  }
+
+  Future<bool> deleteAdmin({@required String documentId}) async {
     try {
-      await adminRef
-          .collection('entries')
-          .document(documentId)
-          .delete();
+      await adminRef.collection('entries').document(documentId).delete();
       return true;
     } catch (e) {
       print(e);
