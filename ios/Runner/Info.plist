@@ -61,5 +61,10 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This location access is required for players to implicitly define the region where the tournament is being hosted or played from</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This location access is required for players to be track the region in which a tournament is being conducted</string>
+	
 </dict>
 </plist>
