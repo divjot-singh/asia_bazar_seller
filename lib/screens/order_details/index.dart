@@ -338,7 +338,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                       onTap: () {
                         contactCustomer(
                             context: context,
-                            phoneNumber: details['phontNumber']);
+                            phoneNumber: details['phoneNumber']);
                       },
                     ),
                   ],
