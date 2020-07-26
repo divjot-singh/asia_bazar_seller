@@ -6,6 +6,7 @@ import 'package:asia_bazar_seller/utils/constants.dart';
 import 'package:asia_bazar_seller/utils/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/svg.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -122,6 +123,19 @@ class AppDrawer extends StatelessWidget {
                         style: theme.textTheme.h4
                             .copyWith(color: ColorShades.greenBg)),
                   ),
+                ListTile(
+                  onTap: () {
+                    Navigator.popAndPushNamed(context, Constants.ORDER_STATS);
+                  },
+                  leading:
+                      Icon(FontAwesome.line_chart, color: ColorShades.greenBg),
+                  title: Text(
+                      L10n().getStr(
+                        'stats.heading',
+                      ),
+                      style: theme.textTheme.h4
+                          .copyWith(color: ColorShades.greenBg)),
+                ),
                 Divider(
                   color: ColorShades.greenBg,
                   thickness: 1,

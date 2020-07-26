@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 abstract class OrderState {
   static Map orderState = {
     'ordersListState': UninitialisedState(),
+    'orderStatsState':UninitialisedState(),
   };
 }
 
@@ -18,4 +19,9 @@ class ItemFetchedState extends OrderState {
   List orderItems;
   String orderId;
   ItemFetchedState({@required this.orderId, @required this.orderItems});
+}
+
+class OrdersFetchedState extends OrderState{
+  List orders;
+  OrdersFetchedState({@required this.orders});
 }

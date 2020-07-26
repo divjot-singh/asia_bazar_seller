@@ -384,8 +384,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Image.asset(
                                           'assets/images/no_orders.png'),
                                       Text(
-                                        L10n().getStr('home.drawer.noOrder',
-                                            {'type': currentFilter}),
+                                        currentFilter != 'all'
+                                            ? L10n().getStr(
+                                                'home.drawer.noOrder',
+                                                {'type': currentFilter})
+                                            : L10n().getStr('home.noOrders'),
                                         style: theme.textTheme.h4.copyWith(
                                             color: ColorShades.greenBg),
                                       )

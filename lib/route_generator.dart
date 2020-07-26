@@ -1,3 +1,4 @@
+import 'package:asia_bazar_seller/blocs/order_bloc/bloc.dart';
 import 'package:asia_bazar_seller/screens/add_admin/index.dart';
 import 'package:asia_bazar_seller/screens/authentication_screen/authentication_screen.dart';
 import 'package:asia_bazar_seller/screens/category_listing/index.dart';
@@ -8,6 +9,7 @@ import 'package:asia_bazar_seller/screens/manage_admins/index.dart';
 import 'package:asia_bazar_seller/screens/order_details/index.dart';
 import 'package:asia_bazar_seller/screens/order_details/item_details.dart';
 import 'package:asia_bazar_seller/screens/redirector/index.dart';
+import 'package:asia_bazar_seller/screens/seller_stats/index.dart';
 import 'package:asia_bazar_seller/screens/update_profile/index.dart';
 import 'package:asia_bazar_seller/screens/user_not_admin/not_admin.dart';
 import 'package:asia_bazar_seller/utils/constants.dart';
@@ -39,6 +41,14 @@ class FluroRouter {
             return UpdateProfile();
           },
         );
+
+      case Constants.ORDER_STATS:
+        return Handler(
+          handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+            return BlocProvider.value(
+                value: OrderDetailsBloc(), child: SellerStats());
+          },
+        );
       case Constants.USER_NOT_ADMIN:
         return Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
@@ -58,7 +68,7 @@ class FluroRouter {
           },
         );
 
-        case Constants.MANAGE_ADMINS:
+      case Constants.MANAGE_ADMINS:
         return Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
             return ManageAdmins();
@@ -143,6 +153,11 @@ class FluroRouter {
       handler: getCommonHandler(Constants.USER_NOT_ADMIN),
       transitionType: TransitionType.fadeIn,
     );
+    router.define(
+      Constants.ORDER_STATS,
+      handler: getCommonHandler(Constants.ORDER_STATS),
+      transitionType: TransitionType.fadeIn,
+    );
 
     router.define(
       Constants.POST_AUTHENTICATION_REDIRECTOR,
@@ -160,7 +175,7 @@ class FluroRouter {
       handler: getCommonHandler(Constants.MANAGE_ADMINS),
       transitionType: TransitionType.inFromBottom,
     );
-    
+
     router.define(
       Constants.ORDER_ITEM_DETAILS,
       handler: getCommonHandler(Constants.ORDER_ITEM_DETAILS),

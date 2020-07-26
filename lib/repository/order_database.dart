@@ -46,6 +46,7 @@ class OrderDatabaseRepo {
         query = query.startAfterDocument(startAt);
       }
       snapshot = await query.limit(limit).getDocuments();
+
       return snapshot.documents;
     } catch (e) {
       print(e);
@@ -102,6 +103,20 @@ class OrderDatabaseRepo {
       });
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<List> fetchDateBasedOrders({@required Timestamp time}) async {
+    try {
+      QuerySnapshot items = await orderRef
+          .orderBy('timestamp')
+          .where('timestamp', isGreaterThanOrEqualTo: time)
+          .getDocuments();
+
+      return items.documents;
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 

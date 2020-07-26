@@ -57,6 +57,21 @@ class OrderDetailsBloc extends Bloc<OrderEvent, Map> {
         if (event.callback != null) event.callback(false);
         print(e);
       }
+    } else if (event is FetchTimeBasedOrders) {
+      try {
+        state['orderStatsState'] = GlobalFetchingState();
+        yield {...state};
+        List orders = await orderRepo.fetchDateBasedOrders(time: event.time);
+        if (orders != null) {
+          state['orderStatsState'] = OrdersFetchedState(orders: orders);
+        } else {
+          state['orderStatsState'] = GlobalErrorState();
+        }
+      } catch (e) {
+        print(e);
+        state['orderStatsState'] = GlobalErrorState();
+      }
+      yield {...state};
     }
   }
 }

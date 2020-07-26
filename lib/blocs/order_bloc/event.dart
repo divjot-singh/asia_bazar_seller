@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 abstract class OrderEvent {}
@@ -26,4 +27,9 @@ class UpdateOrderStatus extends OrderEvent {
       this.callback,
       this.itemList,
       this.pointsDetails});
+}
+
+class FetchTimeBasedOrders extends OrderEvent {
+  Timestamp time;
+  FetchTimeBasedOrders({@required this.time});
 }
