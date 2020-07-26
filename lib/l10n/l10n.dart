@@ -241,6 +241,10 @@ Map<String, Map<String, String>> strings = {
     "orderDetails.returnExchangeWindow":
         "Your return/exchange window will close on",
     "contactSeller.copied": "Phone number copied",
+    "stats.heading":"Order Stats",
+    "stats.thisWeek":"This Week",
+    "stats.today":"Today",
+    "stats.thisMonth":"This month",
     "contactSeller.error.info":
         "Couldn't launch the dialler. Please copy the seller number and make a call to that number"
   },
