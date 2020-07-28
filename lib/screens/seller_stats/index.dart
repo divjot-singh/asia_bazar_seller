@@ -43,14 +43,7 @@ class _SellerStatsState extends State<SellerStats> {
         'filterFunction': filterThisWeekOrders
       },
     };
-    DateTime monthDate = DateTime(now.year, now.month, 1).toUtc();
-    if (now.day == 1) {
-      monthDate = DateTime(now.year, now.month - 1, 1).toUtc();
-    }
-    Timestamp monthTimestamp = Timestamp.fromDate(monthDate);
-
-    BlocProvider.of<OrderDetailsBloc>(context)
-        .add(FetchTimeBasedOrders(time: monthTimestamp));
+    refreshPage();
     super.initState();
   }
 
@@ -76,8 +69,15 @@ class _SellerStatsState extends State<SellerStats> {
     return currentOrders;
   }
 
-  Future<void> refreshPage(context) async {
-    Navigator.pushReplacementNamed(context, Constants.ORDER_STATS);
+  Future<void> refreshPage() async {
+    DateTime monthDate = DateTime(now.year, now.month, 1).toUtc();
+    if (now.day == 1) {
+      monthDate = DateTime(now.year, now.month - 1, 1).toUtc();
+    }
+    Timestamp monthTimestamp = Timestamp.fromDate(monthDate);
+
+    BlocProvider.of<OrderDetailsBloc>(context)
+        .add(FetchTimeBasedOrders(time: monthTimestamp));
   }
 
   @override
@@ -118,7 +118,7 @@ class _SellerStatsState extends State<SellerStats> {
                   children: <Widget>[
                     RefreshIndicator(
                       backgroundColor: ColorShades.greenBg,
-                      onRefresh: () => refreshPage(context),
+                      onRefresh: refreshPage,
                       child: SingleChildScrollView(
                         physics: AlwaysScrollableScrollPhysics(),
                         child: Container(
@@ -238,8 +238,8 @@ class StatsBlock extends StatelessWidget {
           children: <Widget>[
             StatCard(
               info: L10n().getStr('stats.totalAmount'),
-              value: amount.toInt().toString(),
-              valueColor: ColorShades.neon,
+              value: amount.toStringAsFixed(2),
+              valueColor: ColorShades.redOrange,
             ),
             StatCard(
               info: L10n().getStr('stats.ordersPlaced'),
@@ -255,7 +255,7 @@ class StatsBlock extends StatelessWidget {
               StatCard(
                 info: L10n().getStr('stats.ordersRejected'),
                 value: ordersRejected.toString(),
-                valueColor: ColorShades.redOrange,
+                valueColor: ColorShades.red,
               ),
           ],
         ));
@@ -315,9 +315,7 @@ class StatCard extends StatelessWidget {
           style: TextStyle(fontSize: 120, color: valueColor),
         ),
         Text(info,
-            textWidthBasis: TextWidthBasis.parent,
-            style: theme.textTheme.body1Medium
-                .copyWith(color: ColorShades.bastille)),
+            style: theme.textTheme.h3.copyWith(color: ColorShades.bastille)),
       ]),
     );
   }
