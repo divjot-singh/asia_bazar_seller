@@ -251,7 +251,7 @@ Map<String, Map<String, String>> strings = {
     "stats.ordersPlaced": "Orders placed",
     "stats.ordersRejected": "Orders rejected",
     "stats.ordersDelivered": "Orders delivered",
-    "stats.totalAmount": "Total amount",
+    "stats.totalAmount": "Total amount (\$)",
     "stats.thisMonth": "This month",
     "contactSeller.error.info":
         "Couldn't launch the dialler. Please copy the seller number and make a call to that number"
