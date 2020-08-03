@@ -510,8 +510,8 @@ Widget listItem({
                           showCustomLoader(context);
                           BlocProvider.of<ItemDatabaseBloc>(context)
                               .add(RemoveItem(
-                                  categoryId: item['categoryId'].toString(),
-                                  itemId: item['opc'].toString(),
+                                  categoryId: item['category_id'].toString(),
+                                  itemId: item['item_id'].toString(),
                                   callback: (result) {
                                     Navigator.pop(context);
                                     if (result == false) {

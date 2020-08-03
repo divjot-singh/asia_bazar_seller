@@ -40,7 +40,7 @@ class _OrderItemDetailsState extends State<OrderItemDetails> {
     List allItems = items.map((item) {
       var cartItem = item['orderData'].data['itemDetails'];
       return {
-        'id': cartItem['opc'].toString(),
+        'id': cartItem['item_id'].toString(),
         'price': cartItem['price'],
         'returnQuantity': cartItem['cartQuantity'],
         'item': item
@@ -67,7 +67,7 @@ class _OrderItemDetailsState extends State<OrderItemDetails> {
     var returnedQuantity;
     if (selectedItems != null && widget.editView) {
       var selectedCartItem = selectedItems.firstWhere(
-          (item) => item['id'] == listItem['opc'].toString(),
+          (item) => item['id'] == listItem['item_id'].toString(),
           orElse: () => {});
       returnedQuantity = selectedCartItem['returnQuantity'] != null
           ? selectedCartItem['returnQuantity']

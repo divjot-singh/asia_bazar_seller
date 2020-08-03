@@ -892,9 +892,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                           var itemDetails =
                               item['orderData'].data['itemDetails'];
                           return {
-                            'categoryId': itemDetails['categoryId'],
+                            'category_id': itemDetails['category_id'],
                             'quantity': itemDetails['cartQuantity'],
-                            'itemId': itemDetails['opc'].toString()
+                            'itemId': itemDetails['item_id'].toString()
                           };
                         }).toList();
 

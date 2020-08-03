@@ -92,7 +92,7 @@ class OrderDatabaseRepo {
     try {
       itemList.forEach((item) async {
         await inventoryRef
-            .document(item['categoryId'])
+            .document(item['category_id'])
             .collection('items')
             .document(item['itemId'])
             .updateData({
@@ -125,9 +125,9 @@ class OrderDatabaseRepo {
     for (var document in snapshot.documents) {
       var itemdoc = document.data['itemDetails'];
       DocumentSnapshot itemSnapshot = await inventoryRef
-          .document(itemdoc['categoryId'].toString())
+          .document(itemdoc['category_id'].toString())
           .collection('items')
-          .document(itemdoc['opc'].toString())
+          .document(itemdoc['item_id'].toString())
           .get();
       items.add({'orderData': document, 'itemData': itemSnapshot});
     }
