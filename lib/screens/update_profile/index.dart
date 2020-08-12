@@ -18,47 +18,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
   bool nameEditable = false;
   GlobalKey key = GlobalKey<FormState>();
   String username, phone;
-  List<Widget> getAddressBox() {
-    ThemeData theme = Theme.of(context);
-
-    return [
-      Flexible(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(L10n().getStr('editProfile.defaultAddress'),
-                style: theme.textTheme.h4.copyWith(color: ColorShades.greenBg)),
-            GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, Constants.ADDRESS_LIST);
-              },
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    L10n().getStr('editProfile.more'),
-                    style: theme.textTheme.body2Regular
-                        .copyWith(color: ColorShades.greenBg),
-                  ),
-                  SizedBox(
-                    width: Spacing.space4,
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: 12,
-                    color: ColorShades.greenBg,
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-      SizedBox(
-        height: Spacing.space12,
-      ),
-    ].toList();
-  }
+  
 
   @override
   void dispose() {

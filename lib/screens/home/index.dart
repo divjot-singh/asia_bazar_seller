@@ -14,6 +14,7 @@ import 'package:asia_bazar_seller/theme/style.dart';
 import 'package:asia_bazar_seller/utils/constants.dart';
 import 'package:asia_bazar_seller/utils/date_utils.dart';
 import 'package:asia_bazar_seller/utils/deboucer.dart';
+import 'package:asia_bazar_seller/utils/storage_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         countryCode = dialCode['dial_code'];
       });
+      StorageManager.setItem('country_code', countryCode);
     } catch (e) {
       print(e);
     }

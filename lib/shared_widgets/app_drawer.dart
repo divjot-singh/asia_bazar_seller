@@ -123,6 +123,20 @@ class AppDrawer extends StatelessWidget {
                         style: theme.textTheme.h4
                             .copyWith(color: ColorShades.greenBg)),
                   ),
+                if (user['isSuperAdmin'])
+                  ListTile(
+                    onTap: () {
+                      Navigator.popAndPushNamed(context, Constants.UPDATE_INFO);
+                    },
+                    leading:
+                        Icon(Icons.settings_phone, color: ColorShades.greenBg),
+                    title: Text(
+                        L10n().getStr(
+                          'updateInfo.heading',
+                        ),
+                        style: theme.textTheme.h4
+                            .copyWith(color: ColorShades.greenBg)),
+                  ),
                 ListTile(
                   onTap: () {
                     Navigator.popAndPushNamed(context, Constants.ORDER_STATS);

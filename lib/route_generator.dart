@@ -10,6 +10,7 @@ import 'package:asia_bazar_seller/screens/order_details/index.dart';
 import 'package:asia_bazar_seller/screens/order_details/item_details.dart';
 import 'package:asia_bazar_seller/screens/redirector/index.dart';
 import 'package:asia_bazar_seller/screens/seller_stats/index.dart';
+import 'package:asia_bazar_seller/screens/update_info/index.dart';
 import 'package:asia_bazar_seller/screens/update_profile/index.dart';
 import 'package:asia_bazar_seller/screens/user_not_admin/not_admin.dart';
 import 'package:asia_bazar_seller/utils/constants.dart';
@@ -72,6 +73,12 @@ class FluroRouter {
         return Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
             return ManageAdmins();
+          },
+        );
+      case Constants.UPDATE_INFO:
+        return Handler(
+          handlerFunc: (BuildContext context, Map<String, dynamic> params) {
+            return UpdateInfo();
           },
         );
 
@@ -184,6 +191,11 @@ class FluroRouter {
     router.define(
       Constants.ADD_ADMIN,
       handler: getCommonHandler(Constants.ADD_ADMIN),
+      transitionType: TransitionType.cupertinoFullScreenDialog,
+    );
+    router.define(
+      Constants.UPDATE_INFO,
+      handler: getCommonHandler(Constants.UPDATE_INFO),
       transitionType: TransitionType.cupertinoFullScreenDialog,
     );
 

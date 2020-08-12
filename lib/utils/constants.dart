@@ -51,16 +51,8 @@ class Constants {
   static const INVENTORY = 'user/inventory';
   static const ADD_ADMIN = 'user/admin/add';
   static const MANAGE_ADMINS = 'user/admin/manage';
-
-  static const ADMIN_PROFILE = 'user/is_admin';
-  static const ADD_ADDRESS = 'user/add_address';
-  static const ONBOARDING = 'user/onboarding';
-  static const ADDRESS_LIST = 'user/address_list';
-  static const ORDER_LIST = 'user/order_list';
-  static const CART = 'user/cart';
+  static const UPDATE_INFO = 'user/update_info';
   static const CATEGORY_LISTING = 'user/category/:categoryName/:categoryId';
-  static const CHECKOUT = 'user/checkout';
-  static const SEARCH = 'user/search';
   static const ORDER_ITEM_DETAILS =
       'user/order_details/:orderId/item_details/:editView';
   static const ORDER_STATS = 'user/stats';
