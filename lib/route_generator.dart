@@ -15,75 +15,75 @@ import 'package:asia_bazar_seller/screens/update_profile/index.dart';
 import 'package:asia_bazar_seller/screens/user_not_admin/not_admin.dart';
 import 'package:asia_bazar_seller/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:fluro/fluro.dart';
+import 'package:fluro/fluro.dart' as Fluro;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'main.dart';
 
 class FluroRouter {
-  static Router router = Router();
-  static Handler getCommonHandler(String route) {
+  static Fluro.Router router = Fluro.Router();
+  static Fluro.Handler getCommonHandler(String route) {
     switch (route) {
       case Constants.AUTHENTICATION_SCREEN:
-        return Handler(
+        return Fluro.Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
             return AuthenticationScreen();
           },
         );
       case Constants.HOME:
-        return Handler(
+        return Fluro.Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
             return HomeScreen();
           },
         );
       case Constants.EDIT_PROFILE:
-        return Handler(
+        return Fluro.Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
             return UpdateProfile();
           },
         );
 
       case Constants.ORDER_STATS:
-        return Handler(
+        return Fluro.Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
             return BlocProvider.value(
                 value: OrderDetailsBloc(), child: SellerStats());
           },
         );
       case Constants.USER_NOT_ADMIN:
-        return Handler(
+        return Fluro.Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
             return NotAdmin();
           },
         );
       case Constants.INVENTORY:
-        return Handler(
+        return Fluro.Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
             return Inventory();
           },
         );
       case Constants.ADD_ADMIN:
-        return Handler(
+        return Fluro.Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
             return AddAdmin();
           },
         );
 
       case Constants.MANAGE_ADMINS:
-        return Handler(
+        return Fluro.Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
             return ManageAdmins();
           },
         );
       case Constants.UPDATE_INFO:
-        return Handler(
+        return Fluro.Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
             return UpdateInfo();
           },
         );
 
       case Constants.ORDER_DETAILS:
-        return Handler(
+        return Fluro.Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
             var orderId = params['orderId'][0];
             return BlocProvider.value(
@@ -92,7 +92,7 @@ class FluroRouter {
           },
         );
       case Constants.ORDER_ITEM_DETAILS:
-        return Handler(
+        return Fluro.Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
             var orderId = params['orderId'][0];
             var editView = params['editView'][0] == "true";
@@ -105,7 +105,7 @@ class FluroRouter {
           },
         );
       case Constants.CATEGORY_LISTING:
-        return Handler(
+        return Fluro.Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
             return CategoryListing(
               categoryId: params['categoryId'][0],
@@ -114,13 +114,13 @@ class FluroRouter {
           },
         );
       case Constants.POST_AUTHENTICATION_REDIRECTOR:
-        return Handler(
+        return Fluro.Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
             return Redirector();
           },
         );
       default:
-        return Handler(
+        return Fluro.Handler(
           handlerFunc: (BuildContext context, Map<String, dynamic> params) {
             return AuthenticationScreen();
           },
@@ -132,77 +132,77 @@ class FluroRouter {
     router.define(
       Constants.AUTHENTICATION_SCREEN,
       handler: getCommonHandler(Constants.AUTHENTICATION_SCREEN),
-      transitionType: TransitionType.fadeIn,
+      transitionType: Fluro.TransitionType.fadeIn,
     );
     router.define(
       Constants.EDIT_PROFILE,
       handler: getCommonHandler(Constants.EDIT_PROFILE),
-      transitionType: TransitionType.fadeIn,
+      transitionType: Fluro.TransitionType.fadeIn,
     );
     router.define(
       Constants.HOME,
       handler: getCommonHandler(Constants.HOME),
-      transitionType: TransitionType.fadeIn,
+      transitionType: Fluro.TransitionType.fadeIn,
     );
     router.define(
       Constants.CATEGORY_LISTING,
       handler: getCommonHandler(Constants.CATEGORY_LISTING),
-      transitionType: TransitionType.fadeIn,
+      transitionType: Fluro.TransitionType.fadeIn,
     );
     router.define(
       Constants.INVENTORY,
       handler: getCommonHandler(Constants.INVENTORY),
-      transitionType: TransitionType.fadeIn,
+      transitionType: Fluro.TransitionType.fadeIn,
     );
 
     router.define(
       Constants.USER_NOT_ADMIN,
       handler: getCommonHandler(Constants.USER_NOT_ADMIN),
-      transitionType: TransitionType.fadeIn,
+      transitionType: Fluro.TransitionType.fadeIn,
     );
     router.define(
       Constants.ORDER_STATS,
       handler: getCommonHandler(Constants.ORDER_STATS),
-      transitionType: TransitionType.fadeIn,
+      transitionType: Fluro.TransitionType.fadeIn,
     );
 
     router.define(
       Constants.POST_AUTHENTICATION_REDIRECTOR,
       handler: getCommonHandler(Constants.POST_AUTHENTICATION_REDIRECTOR),
-      transitionType: TransitionType.fadeIn,
+      transitionType: Fluro.TransitionType.fadeIn,
     );
 
     router.define(
       Constants.ORDER_DETAILS,
       handler: getCommonHandler(Constants.ORDER_DETAILS),
-      transitionType: TransitionType.inFromBottom,
+      transitionType: Fluro.TransitionType.inFromBottom,
     );
     router.define(
       Constants.MANAGE_ADMINS,
       handler: getCommonHandler(Constants.MANAGE_ADMINS),
-      transitionType: TransitionType.inFromBottom,
+      transitionType: Fluro.TransitionType.inFromBottom,
     );
 
     router.define(
       Constants.ORDER_ITEM_DETAILS,
       handler: getCommonHandler(Constants.ORDER_ITEM_DETAILS),
-      transitionType: TransitionType.cupertinoFullScreenDialog,
+      transitionType: Fluro.TransitionType.cupertinoFullScreenDialog,
     );
     router.define(
       Constants.ADD_ADMIN,
       handler: getCommonHandler(Constants.ADD_ADMIN),
-      transitionType: TransitionType.cupertinoFullScreenDialog,
+      transitionType: Fluro.TransitionType.cupertinoFullScreenDialog,
     );
     router.define(
       Constants.UPDATE_INFO,
       handler: getCommonHandler(Constants.UPDATE_INFO),
-      transitionType: TransitionType.cupertinoFullScreenDialog,
+      transitionType: Fluro.TransitionType.cupertinoFullScreenDialog,
     );
 
     router.define(
       '/',
       handler: getCommonHandler(Constants.AUTHENTICATION_SCREEN),
-      transitionType: TransitionType.fadeIn,
+      transitionType: Fluro.TransitionType.fadeIn,
     );
   }
 }

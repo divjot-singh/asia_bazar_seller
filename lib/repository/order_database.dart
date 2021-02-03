@@ -1,3 +1,4 @@
+import 'package:asia_bazar_seller/repository/payment_repo.dart';
 import 'package:asia_bazar_seller/repository/user_database.dart';
 import 'package:asia_bazar_seller/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -81,10 +82,38 @@ class OrderDatabaseRepo {
         await orderRef.document(orderId).updateData({'status': newStatus});
       if (newStatus == KeyNames['orderRejected']) {
         restoreItemsInInventory(itemList);
+        refundUser(orderId);
       }
       return;
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> refundUser(String orderId) async {
+    var orderSnapshot = await fetchOrderDetails(orderId: orderId);
+    if (orderSnapshot.data != null) {
+      var orderData = orderSnapshot.data,
+          transactionId = orderData['transactionId'],
+          orderId = orderData['orderId'],
+          userId = orderData['userId'];
+      if (transactionId != null) {
+        var response = await PaymentRepository.voidTransaction(
+            transactionId: transactionId);
+
+        Map<String, String> refundData = {
+          'orderId': orderId,
+          'userId': userId,
+          'status': (response['success'] == true).toString()
+        };
+        orderRef
+            .document(orderId)
+            .updateData({'refundStatus': response['success'] == true});
+        var notificationResponse =
+            await PaymentRepository.sendRefundStatusNotification(
+                refundData: refundData);
+        print(notificationResponse);
+      }
     }
   }
 
