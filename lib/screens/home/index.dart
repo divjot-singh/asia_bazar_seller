@@ -49,15 +49,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    ConfigureNotification.configureNotifications();
+    setUpNotificationListeners();
     _controller.text = '';
     fetchCountryCode();
     fetchCurrentFilterOrders();
     _scrollController.addListener(scrollListener);
-
     super.initState();
   }
-
+  setUpNotificationListeners() async{
+    await ConfigureNotification.setUpFCMToken();
+    ConfigureNotification.configureNotifications();
+  }
   fetchCountryCode() async {
     try {
       String countrycode = await FlutterSimCountryCode.simCountryCode;

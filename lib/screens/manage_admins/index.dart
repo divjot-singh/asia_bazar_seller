@@ -150,16 +150,16 @@ class _ManageAdminsState extends State<ManageAdmins> {
                                     showCustomLoader(context);
                                     if (value == 'make_admin') {
                                       bloc.add(UpdatePrivilege(
-                                          documentId: admin.documentID,
+                                          documentId: admin.id,
                                           callback: callback));
                                     } else if (value == 'make_super_admin') {
                                       bloc.add(UpdatePrivilege(
-                                          documentId: admin.documentID,
+                                          documentId: admin.id,
                                           isSuperAdmin: true,
                                           callback: callback));
                                     } else if (value == 'delete') {
                                       bloc.add(DeleteAdmin(
-                                          documentId: admin.documentID,
+                                          documentId: admin.id,
                                           callback: callback));
                                     }
                                   },

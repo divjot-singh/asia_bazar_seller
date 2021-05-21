@@ -21,7 +21,7 @@ class OrderDetailsBloc extends Bloc<OrderEvent, Map> {
           state['orderState'] = GlobalErrorState();
         } else {
           state['orderState'] = OrderFetchedState(
-              orderDetails: order.data, documentId: order.documentID);
+              orderDetails: order.data(), documentId: order.id);
         }
       } catch (e) {
         state['orderState'] = GlobalErrorState();

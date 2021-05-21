@@ -51,9 +51,11 @@ class _SellerStatsState extends State<SellerStats> {
     Timestamp today =
         Timestamp.fromDate(DateTime(now.year, now.month, now.day).toLocal());
     var currentOrders = [...orders];
-    currentOrders.retainWhere((order) =>
-        order.data['timestamp'].millisecondsSinceEpoch >=
-        today.millisecondsSinceEpoch);
+    currentOrders.retainWhere((order) {
+      var orderData = order.data();
+      return orderData['timestamp'].millisecondsSinceEpoch >=
+          today.millisecondsSinceEpoch;
+    });
     return currentOrders;
   }
 
@@ -63,9 +65,11 @@ class _SellerStatsState extends State<SellerStats> {
     DateTime startOfWeek = today.add(Duration(days: -1 * diff)).toLocal();
     Timestamp startOfWeekTimeStamp = Timestamp.fromDate(startOfWeek);
     var currentOrders = [...orders];
-    currentOrders.retainWhere((order) =>
-        order.data['timestamp'].millisecondsSinceEpoch >=
-        startOfWeekTimeStamp.millisecondsSinceEpoch);
+    currentOrders.retainWhere((order) {
+      var orderData = order.data();
+      return orderData['timestamp'].millisecondsSinceEpoch >=
+          startOfWeekTimeStamp.millisecondsSinceEpoch;
+    });
     return currentOrders;
   }
 

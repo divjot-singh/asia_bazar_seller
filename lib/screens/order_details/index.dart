@@ -483,7 +483,8 @@ class _OrderDetailsState extends State<OrderDetails> {
               otherCharges = 0,
               cartTotal = 0;
           cartTotal = items.fold(0, (value, item) {
-            var details = item['orderData'].data['itemDetails'];
+            var orderSnapshotData = item['orderData'].data();
+            var details = orderSnapshotData['itemDetails'];
             var price = details['price'] != null ? details['price'] : 0;
             return value + (price * details['cartQuantity']);
           });
@@ -544,18 +545,25 @@ class _OrderDetailsState extends State<OrderDetails> {
                       ],
                     ),
                     ...items.map((item) {
-                      var orderedItemDetails =
-                          item['orderData'].data['itemDetails'];
-                      var itemDetails = item['itemData'].data;
+                      var orderData = item['orderData'].data();
+                      var orderedItemDetails = orderData['itemDetails'];
+                      var itemDetails = item['itemData'].data();
                       return TableRow(children: [
                         TableCell(
-                          child: Image.network(
-                            itemDetails['image_url'] != null
-                                ? itemDetails['image_url']
-                                : 'https://dummyimage.com/600x400/ffffff/000000.png&text=Image+not+available',
-                            height: 60,
-                            width: 60,
-                          ),
+                          child: itemDetails['image_url'] != null
+                              ? FadeInImage.assetNetwork(
+                                  height: 60,
+                                  width: 60,
+                                  fit: BoxFit.fill,
+                                  placeholder: 'assets/images/loader.gif',
+                                  image: itemDetails['image_url']
+                                      .replaceAll('http', 'https'),
+                                )
+                              : Image.asset(
+                                  'assets/images/image_unavailable.jpeg',
+                                  height: 60,
+                                  width: 60,
+                                ),
                         ),
                         TableCell(
                           child: Padding(
@@ -889,8 +897,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                       if (currentState is ItemFetchedState &&
                           currentState.orderId == widget.orderId) {
                         var orderedItems = currentState.orderItems.map((item) {
-                          var itemDetails =
-                              item['orderData'].data['itemDetails'];
+                          var orderData = item['orderData'].data();
+                          var itemDetails = orderData['itemDetails'];
                           return {
                             'category_id': itemDetails['category_id'],
                             'quantity': itemDetails['cartQuantity'],

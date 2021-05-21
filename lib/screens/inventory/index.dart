@@ -50,8 +50,7 @@ class _InventoryState extends State<Inventory> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                     fit: BoxFit.contain,
-                    image: AssetImage(
-                        'assets/images/' + item['id'].toString() + '.jpeg')),
+                    image: NetworkImage(item['thumb_url'].toString())),
               ),
               child: Container(
                 height: MediaQuery.of(context).size.height,

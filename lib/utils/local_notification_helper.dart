@@ -12,8 +12,8 @@ NotificationDetails getNotificationDetails(
     '1',
     'Tournament notifications',
     'Notifications related to tournament.',
-    importance: Importance.Max,
-    priority: Priority.Max,
+    importance: Importance.max,
+    priority: Priority.max,
     playSound: true,
     icon: '@mipmap/launcher',
     color: ColorShades.red,
@@ -29,8 +29,8 @@ NotificationDetails getNotificationDetails(
 
   final iOSPlatformChannelSpecifics = IOSNotificationDetails();
   return NotificationDetails(
-    androidPlatformChannelSpecifics,
-    iOSPlatformChannelSpecifics,
+    android: androidPlatformChannelSpecifics,
+    iOS: iOSPlatformChannelSpecifics,
   );
   // await flutterLocalNotificationsPlugin.show(
   //   0,

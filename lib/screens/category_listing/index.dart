@@ -287,7 +287,7 @@ class _CategoryListingState extends State<CategoryListing> {
                                     controller: _scrollController,
                                     itemCount: items.length,
                                     itemBuilder: (context, index) {
-                                      var item = items[index].data;
+                                      var item = items[index].data();
                                       return listItem(
                                           context: context,
                                           item: item,
@@ -478,13 +478,26 @@ Widget listItem({
       ),
       child: Row(
         children: <Widget>[
-          Image.network(
-            item['image_url'] != null
-                ? item['image_url']
-                : 'https://dummyimage.com/600x400/ffffff/000000.png&text=Image+not+available',
-            height: 100,
-            width: 100,
-          ),
+          item['image_url'] != null
+              ? FadeInImage.assetNetwork(
+                  height: 100,
+                  width: 100,
+                  fit: BoxFit.fill,
+                  placeholder: 'assets/images/loader.gif',
+                  image: item['image_url'].replaceAll('http', 'https'),
+                )
+              : Image.asset(
+                  'assets/images/image_unavailable.jpeg',
+                  height: 100,
+                  width: 100,
+                ),
+          // Image.network(
+          //   item['image_url'] != null
+          //       ? item['image_url']
+          //       : 'https://dummyimage.com/600x400/ffffff/000000.png&text=Image+not+available',
+          //   height: 100,
+          //   width: 100,
+          // ),
           SizedBox(
             width: Spacing.space12,
           ),
