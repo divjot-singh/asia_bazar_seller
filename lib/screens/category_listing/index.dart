@@ -158,7 +158,7 @@ class _CategoryListingState extends State<CategoryListing> {
                       child: ListView.builder(
                         itemCount: items.length,
                         itemBuilder: (context, index) {
-                          var item = items[index].data;
+                          var item = items[index].data();
                           return listItem(
                               context: context,
                               item: item,
@@ -484,10 +484,10 @@ Widget listItem({
                   width: 100,
                   fit: BoxFit.fill,
                   placeholder: 'assets/images/loader.gif',
-                  image: item['image_url'].replaceAll('http', 'https'),
+                  image: item['image_url'],
                 )
               : Image.asset(
-                  'assets/images/image_unavailable.jpeg',
+                  'assets/images/not-available.jpeg',
                   height: 100,
                   width: 100,
                 ),

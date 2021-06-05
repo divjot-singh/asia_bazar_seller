@@ -75,7 +75,6 @@ class ConfigureNotification {
     if (initialMessage != null) {
       await onBackgroundNotificationClick(initialMessage.data);
     }
-    log('hello');
     //handle background messages
     FirebaseMessaging.onBackgroundMessage(
         ConfigureNotification._firebaseMessagingBackgroundHandler);

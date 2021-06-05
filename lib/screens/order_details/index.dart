@@ -556,11 +556,10 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   width: 60,
                                   fit: BoxFit.fill,
                                   placeholder: 'assets/images/loader.gif',
-                                  image: itemDetails['image_url']
-                                      .replaceAll('http', 'https'),
+                                  image: itemDetails['image_url'],
                                 )
                               : Image.asset(
-                                  'assets/images/image_unavailable.jpeg',
+                                  'assets/images/not-available.jpeg',
                                   height: 60,
                                   width: 60,
                                 ),
