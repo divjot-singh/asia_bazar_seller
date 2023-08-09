@@ -483,8 +483,7 @@ class _OrderDetailsState extends State<OrderDetails> {
               otherCharges = 0,
               cartTotal = 0;
           cartTotal = items.fold(0, (value, item) {
-            var orderSnapshotData = item['orderData'].data();
-            var details = orderSnapshotData['itemDetails'];
+            var details = item['orderData'].data['itemDetails'];
             var price = details['price'] != null ? details['price'] : 0;
             return value + (price * details['cartQuantity']);
           });
@@ -545,9 +544,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                       ],
                     ),
                     ...items.map((item) {
-                      var orderData = item['orderData'].data();
-                      var orderedItemDetails = orderData['itemDetails'];
-                      var itemDetails = item['itemData'].data();
+                      var orderedItemDetails =
+                          item['orderData'].data['itemDetails'];
+                      var itemDetails = item['itemData'].data;
                       return TableRow(children: [
                         TableCell(
                           child: itemDetails['image_url'] != null
@@ -896,8 +895,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                       if (currentState is ItemFetchedState &&
                           currentState.orderId == widget.orderId) {
                         var orderedItems = currentState.orderItems.map((item) {
-                          var orderData = item['orderData'].data();
-                          var itemDetails = orderData['itemDetails'];
+                          var itemDetails =
+                              item['orderData'].data['itemDetails'];
                           return {
                             'category_id': itemDetails['category_id'],
                             'quantity': itemDetails['cartQuantity'],

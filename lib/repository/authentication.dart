@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:asia_bazar_seller/models/user.dart' as UserModel;
+import 'package:asia_bazar_seller/models/user.dart';
 import 'package:asia_bazar_seller/services/log_printer.dart';
 import 'package:asia_bazar_seller/utils/constants.dart';
 import 'package:asia_bazar_seller/utils/storage_manager.dart';
@@ -14,7 +14,7 @@ enum AuthCallbackType { completed, failed, codeSent, timeout }
 
 class AuthRepo {
   static FirebaseAuth _auth = FirebaseAuth.instance;
-  static FirebaseMessaging _fcm = FirebaseMessaging.instance;
+  static FirebaseMessaging _fcm = FirebaseMessaging();
   static final logger = getLogger('AuthRepo');
   static List<String> serverNotificationIds = [];
   int notificationId = 0;
@@ -32,7 +32,7 @@ class AuthRepo {
           await _verificationComplete(authCredential);
           callback(AuthCallbackType.completed, authCredential);
         }),
-        verificationFailed: (FirebaseAuthException authException) {
+        verificationFailed: (AuthException authException) {
           callback(AuthCallbackType.failed, authException);
         },
         codeSent: (String verificationId, [int forceResendingToken]) {
@@ -45,42 +45,42 @@ class AuthRepo {
         });
   }
 
-  Future<UserModel.User> _verificationComplete(
-      AuthCredential authCredential) async {
+  Future<User> _verificationComplete(AuthCredential authCredential) async {
     _authCredential = authCredential;
     var authResult = await _auth.signInWithCredential(authCredential);
     logger.i(authResult);
     return await setupUserData(authResult.user);
   }
 
-  Future<UserModel.User> checkIfUserLoggedIn() async {
-    User firebaseUser = _auth.currentUser;
+  Future<User> checkIfUserLoggedIn() async {
+    FirebaseUser firebaseUser = await _auth.currentUser();
     if (firebaseUser == null) {
       return null;
     } else {
-      UserModel.User user = await setupUserData(firebaseUser);
+      User user = await setupUserData(firebaseUser);
       return user;
     }
   }
 
-  Future<UserModel.User> setupUserData(User firebaseUser) async {
+  Future<User> setupUserData(FirebaseUser firebaseUser) async {
     var user;
     try {
-      String tokenResult = await firebaseUser.getIdToken(true);
-      user = UserModel.User(
+      IdTokenResult tokenResult = await firebaseUser.getIdToken(refresh: true);
+      user = User(
           userId: firebaseUser.uid,
           userName: firebaseUser.displayName,
           phoneNumber: firebaseUser.phoneNumber,
           cart: null,
-          firebaseToken: tokenResult);
+          firebaseToken: tokenResult.token);
     } catch (error) {
-      user = UserModel.User(
+      user = User(
         userId: firebaseUser.uid,
         userName: firebaseUser.displayName,
         phoneNumber: firebaseUser.phoneNumber,
         cart: null,
       );
     } finally {
+      setUpFcm(userId: firebaseUser.uid);
       await StorageManager.setItem(KeyNames["userId"], user.userId);
       await StorageManager.setItem(KeyNames["userName"], user.userName);
       await StorageManager.setItem(KeyNames["phone"], user.phoneNumber);
@@ -89,27 +89,30 @@ class AuthRepo {
     return user;
   }
 
-  Future<void> setUpFcm(
-      {@required String userId, @required String token}) async {
-    if (token != null) {
-      await FirebaseFirestore.instance
+  
+
+
+
+  Future<void> setUpFcm({@required String userId}) async {
+    var firebaseToken = await _fcm.getToken();
+
+    if (firebaseToken != null) {
+      await Firestore.instance
           .collection('adminTokens')
-          .doc(userId)
-          .set({
+          .document(userId)
+          .setData({
         'user_id': userId,
-        'token': token,
-        'platform': Platform.isIOS
-            ? 'ios'
-            : Platform.isAndroid
-                ? 'android'
-                : 'web'
+        'token': firebaseToken,
+        'platform':
+            Platform.isIOS ? 'ios' : Platform.isAndroid ? 'android' : 'web'
       });
-      await StorageManager.setItem(KeyNames['fcmToken'], token);
+      await StorageManager.setItem(KeyNames['fcmToken'], firebaseToken);
     }
   }
 
-  Future<UserModel.User> signInWithSmsCode(String smsCode) async {
-    AuthCredential authCredential = PhoneAuthProvider.credential(
+  
+  Future<User> signInWithSmsCode(String smsCode) async {
+    AuthCredential authCredential = PhoneAuthProvider.getCredential(
       smsCode: smsCode,
       verificationId: _verificationId,
     );

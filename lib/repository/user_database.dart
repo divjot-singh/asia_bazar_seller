@@ -7,22 +7,23 @@ import 'package:flutter/material.dart';
 enum UserType { Admin, User, New }
 
 class UserDatabase {
-  static FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  static Firestore _firestore = Firestore.instance;
   static CollectionReference userDatabase = _firestore.collection('users');
   static DocumentReference usersRef =
-      _firestore.collection('users').doc('user');
+      _firestore.collection('users').document('user');
   static DocumentReference adminRef =
-      _firestore.collection('users').doc('admin');
+      _firestore.collection('users').document('admin');
   static CollectionReference inventoryRef = _firestore.collection('inventory');
   Future<UserDatabaseState> checkIfAdmin({@required String phoneNumber}) async {
     try {
       QuerySnapshot adminData = await adminRef
           .collection('entries')
           .where(KeyNames['phone'], isEqualTo: phoneNumber)
-          .get();
-      var snapshot = adminData.docs.length > 0 ? adminData.docs[0] : null;
+          .getDocuments();
+      var snapshot =
+          adminData.documents.length > 0 ? adminData.documents[0] : null;
       if (snapshot != null) {
-        return UserIsAdmin(user: snapshot.data());
+        return UserIsAdmin(user: snapshot.data);
       } else {
         return UserIsNotAdmin();
       }
@@ -36,13 +37,13 @@ class UserDatabase {
     QuerySnapshot snapshot = await adminRef
         .collection('entries')
         .where(KeyNames['phone'], isEqualTo: phone)
-        .get();
-    if (snapshot.docs.length > 0) {
-      var documentId = snapshot.docs[0].id;
+        .getDocuments();
+    if (snapshot.documents.length > 0) {
+      var documentId = snapshot.documents[0].documentID;
       await adminRef
           .collection('entries')
-          .doc(documentId)
-          .update({KeyNames['userName']: username});
+          .document(documentId)
+          .updateData({KeyNames['userName']: username});
     }
   }
 
@@ -50,9 +51,9 @@ class UserDatabase {
     QuerySnapshot snapshot = await adminRef
         .collection('entries')
         .where(KeyNames['phone'], isEqualTo: phone)
-        .get();
-    if (snapshot.docs.length > 0) {
-      return snapshot.docs[0].data;
+        .getDocuments();
+    if (snapshot.documents.length > 0) {
+      return snapshot.documents[0].data;
     }
   }
 
@@ -61,8 +62,8 @@ class UserDatabase {
       QuerySnapshot snapshot = await adminRef
           .collection('entries')
           .where(KeyNames['phone'], isEqualTo: userData[KeyNames['phone']])
-          .get();
-      if (snapshot.docs.length == 0)
+          .getDocuments();
+      if (snapshot.documents.length == 0)
         await adminRef.collection('entries').add({...userData});
       else
         return 'ADMIN_ALREADY_ADDED';
@@ -74,8 +75,9 @@ class UserDatabase {
 
   Future<List> fetchAllAdmins() async {
     try {
-      QuerySnapshot snapshot = await adminRef.collection('entries').get();
-      return snapshot.docs;
+      QuerySnapshot snapshot =
+          await adminRef.collection('entries').getDocuments();
+      return snapshot.documents;
     } catch (e) {
       print(e);
       return null;
@@ -87,8 +89,8 @@ class UserDatabase {
     try {
       await adminRef
           .collection('entries')
-          .doc(documentId)
-          .update({KeyNames['superAdmin']: isSuperAdmin});
+          .document(documentId)
+          .updateData({KeyNames['superAdmin']: isSuperAdmin});
       return true;
     } catch (e) {
       print(e);
@@ -97,13 +99,17 @@ class UserDatabase {
   }
 
   Future<void> updatePoints(Map pointsDetails) async {
-    await usersRef.collection('entries').doc(pointsDetails['userId']).update(
-        {KeyNames['points']: FieldValue.increment(pointsDetails['points'])});
+    await usersRef
+        .collection('entries')
+        .document(pointsDetails['userId'])
+        .updateData({
+      KeyNames['points']: FieldValue.increment(pointsDetails['points'])
+    });
   }
 
   Future<bool> deleteAdmin({@required String documentId}) async {
     try {
-      await adminRef.collection('entries').doc(documentId).delete();
+      await adminRef.collection('entries').document(documentId).delete();
       return true;
     } catch (e) {
       print(e);

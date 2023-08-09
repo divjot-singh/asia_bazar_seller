@@ -28,7 +28,7 @@ class PageFetchingView extends PageView {
         );
       },
     );
-    return Directionality(textDirection: TextDirection.ltr, child: loader);
+    return loader;
   }
 }
 

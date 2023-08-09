@@ -287,7 +287,7 @@ class _CategoryListingState extends State<CategoryListing> {
                                     controller: _scrollController,
                                     itemCount: items.length,
                                     itemBuilder: (context, index) {
-                                      var item = items[index].data();
+                                      var item = items[index].data;
                                       return listItem(
                                           context: context,
                                           item: item,

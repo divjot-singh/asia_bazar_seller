@@ -33,23 +33,19 @@ class LocalNotificationAndroid extends LocalNotification {
         );
 
   String getTitle() {
-    var data = notificationMessage["extra_data"];
-    Map extraData = {...json.decode(data)};
-    return extraData['title'];
+    return notificationMessage['notification']["title"];
   }
 
   String getBody() {
-    var data = notificationMessage["extra_data"];
-    Map extraData = {...json.decode(data)};
-    return extraData['body'];
+    return notificationMessage['notification']["body"];
   }
 
   String getIcon() {
-    return notificationMessage["icon"];
+    return notificationMessage['data']["icon"];
   }
 
   String getRedirectPath() {
-    var data = notificationMessage["extra_data"];
+    var data = notificationMessage['data']["extra_data"];
     Map extraData = {...json.decode(data)};
     return NotificationTypes.fetchNotificationRoute(extraData);
   }
@@ -96,13 +92,13 @@ class LocalNotificationIos extends LocalNotification {
 
   String getTitle() {
     var data = notificationMessage["extra_data"];
-    Map extraData = {...json.decode(data)};
+     Map extraData = {...json.decode(data)};
     return extraData["title"];
   }
 
   String getBody() {
     var data = notificationMessage["extra_data"];
-    Map extraData = {...json.decode(data)};
+     Map extraData = {...json.decode(data)};
     return extraData["body"];
   }
 

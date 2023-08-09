@@ -9,19 +9,16 @@ import 'package:asia_bazar_seller/blocs/order_bloc/bloc.dart';
 import 'package:asia_bazar_seller/blocs/user_database_bloc/bloc.dart';
 import 'package:asia_bazar_seller/index.dart';
 import 'package:asia_bazar_seller/route_generator.dart';
-import 'package:asia_bazar_seller/shared_widgets/firebase_notification_configuration.dart';
-import 'package:asia_bazar_seller/shared_widgets/page_views.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   // enable network traffic logging
   HttpClient.enableTimelineLogging = true;
-  WidgetsFlutterBinding.ensureInitialized();
+
   //Crashlytics.instance.enableInDevMode = true;
   //FlutterError.onError = recordFlutterError;
-  Future<FirebaseApp> firebaseApp = Firebase.initializeApp();
+
   FluroRouter.setupRouter();
   //runZoned(
   //() => {
@@ -41,19 +38,7 @@ void main() {
           create: (BuildContext context) => BlocHolder().globalBloc(),
         ),
       ],
-      child: FutureBuilder(
-        future: firebaseApp,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return PageErrorView();
-          } else if (snapshot.connectionState == ConnectionState.done) {
-            return App();
-          }
-
-          // Otherwise, show something whilst waiting for initialization to complete
-          return PageFetchingView();
-        },
-      ),
+      child: App(),
     ),
   );
   //};

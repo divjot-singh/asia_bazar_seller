@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class OrderDatabaseRepo {
-  static FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  static Firestore _firestore = Firestore.instance;
   static CollectionReference orderRef = _firestore.collection('orders');
   static CollectionReference orderedItems = _firestore.collection('orderItems');
   static CollectionReference inventoryRef = _firestore.collection('inventory');
@@ -13,9 +13,12 @@ class OrderDatabaseRepo {
   Future<dynamic> fetchOrderDetails({@required String orderId}) async {
     var returnValue;
     try {
-      QuerySnapshot snapshot =
-          await orderRef.where('orderId', isEqualTo: orderId).limit(1).get();
-      DocumentSnapshot order = snapshot.docs.length > 0 ? snapshot.docs[0] : {};
+      QuerySnapshot snapshot = await orderRef
+          .where('orderId', isEqualTo: orderId)
+          .limit(1)
+          .getDocuments();
+      DocumentSnapshot order =
+          snapshot.documents.length > 0 ? snapshot.documents[0] : {};
       returnValue = order;
 
       return returnValue;
@@ -43,9 +46,9 @@ class OrderDatabaseRepo {
       if (startAt != null && (searchQuery == null || searchQuery.length == 0)) {
         query = query.startAfterDocument(startAt);
       }
-      snapshot = await query.limit(limit).get();
+      snapshot = await query.limit(limit).getDocuments();
 
-      return snapshot.docs;
+      return snapshot.documents;
     } catch (e) {
       print(e);
       return null;
@@ -54,8 +57,9 @@ class OrderDatabaseRepo {
 
   Future<List> fetchOrderItems({@required String orderId}) async {
     try {
-      QuerySnapshot snapshot =
-          await orderedItems.where('orderId', isEqualTo: orderId).get();
+      QuerySnapshot snapshot = await orderedItems
+          .where('orderId', isEqualTo: orderId)
+          .getDocuments();
       List items = await fetchItemsFromOrder(snapshot: snapshot);
       return items;
     } catch (e) {
@@ -70,12 +74,12 @@ class OrderDatabaseRepo {
       Map pointsDetails}) async {
     try {
       if (newStatus == KeyNames['orderDelivered']) {
-        await orderRef.doc(orderId).update(
+        await orderRef.document(orderId).updateData(
             {'status': newStatus, 'deliveryTimestamp': Timestamp.now()});
         if (pointsDetails != null)
           await userDatabase.updatePoints(pointsDetails);
       } else
-        await orderRef.doc(orderId).update({'status': newStatus});
+        await orderRef.document(orderId).updateData({'status': newStatus});
       if (newStatus == KeyNames['orderRejected']) {
         restoreItemsInInventory(itemList);
         refundUser(orderId);
@@ -103,8 +107,8 @@ class OrderDatabaseRepo {
           'status': (response['success'] == true).toString()
         };
         orderRef
-            .doc(orderId)
-            .update({'refundStatus': response['success'] == true});
+            .document(orderId)
+            .updateData({'refundStatus': response['success'] == true});
         var notificationResponse =
             await PaymentRepository.sendRefundStatusNotification(
                 refundData: refundData);
@@ -117,10 +121,10 @@ class OrderDatabaseRepo {
     try {
       itemList.forEach((item) async {
         await inventoryRef
-            .doc(item['category_id'])
+            .document(item['category_id'])
             .collection('items')
-            .doc(item['itemId'])
-            .update({
+            .document(item['itemId'])
+            .updateData({
           'quantity': FieldValue.increment(item['quantity'] is String
               ? int.parse(item['quantity'])
               : item['quantity'])
@@ -136,9 +140,9 @@ class OrderDatabaseRepo {
       QuerySnapshot items = await orderRef
           .orderBy('timestamp')
           .where('timestamp', isGreaterThanOrEqualTo: time)
-          .get();
+          .getDocuments();
 
-      return items.docs;
+      return items.documents;
     } catch (e) {
       print(e);
       return null;
@@ -147,13 +151,12 @@ class OrderDatabaseRepo {
 
   Future<List> fetchItemsFromOrder({@required QuerySnapshot snapshot}) async {
     List<Map<String, dynamic>> items = [];
-    for (var document in snapshot.docs) {
-      Map itemData = document.data();
-      var itemdoc = itemData['itemDetails'];
+    for (var document in snapshot.documents) {
+      var itemdoc = document.data['itemDetails'];
       DocumentSnapshot itemSnapshot = await inventoryRef
-          .doc(itemdoc['category_id'].toString())
+          .document(itemdoc['category_id'].toString())
           .collection('items')
-          .doc(itemdoc['item_id'].toString())
+          .document(itemdoc['item_id'].toString())
           .get();
       items.add({'orderData': document, 'itemData': itemSnapshot});
     }

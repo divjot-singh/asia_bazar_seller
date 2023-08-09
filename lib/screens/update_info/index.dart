@@ -315,14 +315,11 @@ class _UpdateInfoState extends State<UpdateInfo> {
                         showCustomLoader(context);
                         var data = {
                           'phoneNumber': _phone.text,
-                          'deliveryCharges':
-                              double.tryParse(_deliveryCharge.text),
-                          'packagingCharges': double.tryParse(_packCharge.text),
-                          'otherCharges': double.tryParse(_otherCharge.text),
-                          'loyalty_point_value':
-                              double.tryParse(_pointValue.text),
-                          'loyalty_point_limit':
-                              double.tryParse(_minPointValue.text),
+                          'deliveryCharges': _deliveryCharge.text,
+                          'packagingCharges': _packCharge.text,
+                          'otherCharges': _otherCharge.text,
+                          'loyalty_point_value': _pointValue.text,
+                          'loyalty_point_limit': _minPointValue.text,
                         };
                         BlocProvider.of<GlobalBloc>(context)
                             .add(UpdateSellerInfo(

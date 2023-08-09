@@ -43,11 +43,10 @@ class NetworkManager {
       Map<String, String> headers = {
         "content-type": "application/x-www-form-urlencoded"
       };
-      Uri uri = Uri(host: url);
       if (type == 'POST') {
-        response = await client.post(uri, body: data, headers: headers);
+        response = await client.post(url, body: data, headers: headers);
       } else if (type == 'GET') {
-        response = await client.get(uri, params: data, headers: headers);
+        response = await client.get(url, params: data, headers: headers);
       }
       Map<dynamic, dynamic> responseBody;
 
